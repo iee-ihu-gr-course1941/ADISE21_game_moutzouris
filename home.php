@@ -17,12 +17,12 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
      </head>
 
 
-
      <body>
 
           <button onclick="addCard();" class="add_button" id="add_button">Add card test</button>
 
           <h1>GEIA !</h1>
+          <h2>Pou sai re man </h2>
 
           <div class="clearfix">
                <?php
