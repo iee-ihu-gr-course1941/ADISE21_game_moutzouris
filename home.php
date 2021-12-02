@@ -41,7 +41,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
           </div>
 
 
-          <h3 class="user_who">User: <?php echo $_SESSION['name']; ?></h3>
+          <h3 class="user_who">Χρήστης: <?php echo $_SESSION['name']; ?></h3>
           <button onclick="location.href = 'logout.php';" id="logout_button" class="logout_button">Logout</button>
 
      </body>
