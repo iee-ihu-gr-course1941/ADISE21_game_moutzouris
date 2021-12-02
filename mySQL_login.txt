@@ -1,12 +1,12 @@
 
 
-CREATE DATABASE test_db;
+CREATE DATABASE moutzouris;
 
 
 ---------------------------------------
 
 
-(MESA STO DATABASE TOY test_db)
+(MESA STO DATABASE TOY moutzouris)
 
 CREATE TABLE users
 (id int NOT NULL,
