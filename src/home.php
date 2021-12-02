@@ -8,7 +8,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
      <html>
 
      <head>
-          <title>HOME</title>
+          <title>Μουτζούρης</title>
           <link rel="stylesheet" type="text/css" href="styles/home_style.css">
 
           <script>
@@ -21,8 +21,6 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
      <body>
 
           <button onclick="addCard();" class="add_button" id="add_button">Add card test</button>
-
-          <h1>GEIA !</h1>
 
           <div class="clearfix">
                <?php
@@ -44,7 +42,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
 
           <h3 class="user_who">Χρήστης: <?php echo $_SESSION['name']; ?></h3>
-          <button onclick="location.href = 'auth/logout.php';" id="logout_button" class="logout_button">Logout</button>
+          <button onclick="location.href = 'auth/logout.php';" id="logout_button" class="logout_button">Αποσύνδεση</button>
 
      </body>
      <script>

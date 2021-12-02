@@ -15,10 +15,10 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
 	$pass = validate($_POST['password']);
 
 	if (empty($uname)) {
-		header("Location: ../index.php?error=User Name is required");
+		header("Location: ../index.php?error=Το όνομα χρήστη είναι απαραίτητο");
 	    exit();
 	}else if(empty($pass)){
-        header("Location: ../index.php?error=Password is required");
+        header("Location: ../index.php?error=Ο κωδικός είναι απαραίτητος");
 	    exit();
 	}else{
 		$sql = "SELECT * FROM users WHERE user_name='$uname' AND password='$pass'";
@@ -34,11 +34,11 @@ if (isset($_POST['uname']) && isset($_POST['password'])) {
             	header("Location: ../home.php");
 		        exit();
             }else{
-				header("Location: ../index.php?error=Incorect User name or password");
+				header("Location: ../index.php?error=Λάθος όνομα χρήστη ή κωδικός");
 		        exit();
 			}
 		}else{
-			header("Location: ../index.php?error=Incorect User name or password");
+			header("Location: ../index.php?error=Λάθος όνομα χρήστη ή κωδικός");
 	        exit();
 		}
 	}
