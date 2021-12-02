@@ -1,0 +1,91 @@
+body {
+	background: #27a716;
+	display: flex;
+  height: 100vh;
+	flex-direction: column;
+  background-image: url(home_wallpaper.jpg);
+  background-repeat: no-repeat;
+  width: 100%; 
+  height: 100vh; 
+  overflow: hidden;
+
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.img-container {
+  float: left;
+  
+  padding: 1px;
+  width:2%;
+
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+  width: 20%;
+  position:relative;
+ 
+}
+
+.clearfix{
+  margin-top: 43%; /* apostasi apo panw to div me tis kartes */
+  margin-left: 500px; /* apostasi apo aristera */ 
+  border: 3px solid #73AD21;
+  width: 57%;
+  text-align: bottom;
+}
+
+  .logout_button {
+ 
+    float: right;
+    background: #555;
+    padding: 10px 15px;
+    color: #fff;
+    position:fixed;
+    right:10px;
+    top:5px;
+    border: none;
+    text-decoration: none;
+  }
+ 
+
+  .add_button{
+    float: left;
+    background: #555;
+    padding: 10px 15px;
+    color: #fff;
+    position:fixed;
+    margin:100px;
+    border: none;
+    text-decoration: none;
+  }
+
+  *{
+    font-family: sans-serif;
+    box-sizing: border-box;
+  }
+
+ h3{
+  color: #fff;
+  float: right;
+  padding: 5px 2px;
+  right:10px;
+  top:25px;
+  position:fixed;
+  border:#555;
+  background: #555;
+}
+
+img{
+/* to megethos ton karton */
+  width: 300%; 
+}
+
+
+
+  
