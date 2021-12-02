@@ -22,6 +22,8 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
           <button onclick="addCard();" class="add_button" id="add_button">Add card test</button>
 
+          <h1>GEIA !</h1>
+
           <div class="clearfix">
                <?php
                $sqlQuery = "SELECT * FROM Kartes";
