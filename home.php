@@ -17,11 +17,12 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
      </head>
 
 
-
      <body>
 
 
-          
+
+          <h1>GEIA !</h1>
+          <h2>Pou sai re man </h2>
 
           <div class="clearfix">
                <?php
