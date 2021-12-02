@@ -3,7 +3,7 @@ body {
 	display: flex;
   height: 100vh;
 	flex-direction: column;
-  background-image: url(home_wallpaper.jpg);
+  background-image: url(../assets/home_wallpaper.jpg);
   background-repeat: no-repeat;
   width: 100%; 
   height: 100vh; 

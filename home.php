@@ -1,6 +1,6 @@
 <?php
 session_start();
-include './db_conn.php';
+include './db/db_conn.php';
 if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
 ?>
@@ -9,7 +9,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
      <head>
           <title>HOME</title>
-          <link rel="stylesheet" type="text/css" href="home_style.css">
+          <link rel="stylesheet" type="text/css" href="styles/home_style.css">
 
           <script>
 
@@ -44,7 +44,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
 
           <h3 class="user_who">Χρήστης: <?php echo $_SESSION['name']; ?></h3>
-          <button onclick="location.href = 'logout.php';" id="logout_button" class="logout_button">Logout</button>
+          <button onclick="location.href = 'auth/logout.php';" id="logout_button" class="logout_button">Logout</button>
 
      </body>
      <script>

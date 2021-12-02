@@ -2,12 +2,12 @@
 <html>
 <head>
 	<title>LOGIN</title>
-	<link rel="stylesheet" type="text/css" href="index_style.css">
+	<link rel="stylesheet" type="text/css" href="styles/index_style.css">
 </head>
 <body>
      <h1 id=game_title>Μουτζούρης</h1>
 
-    <form action="login.php" method="post">
+    <form action="auth/login.php" method="post">
      	<h2>LOGIN</h2>
      	<?php if (isset($_GET['error'])) { ?>
      		<p class="error"><?php echo $_GET['error']; ?></p>
