@@ -46,7 +46,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
 
      </body>
      <script>
-          console.log(<?php $result ?>);
+
      </script>
 
      </html>
