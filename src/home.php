@@ -1,7 +1,7 @@
 <?php
 session_start();
 include './db/db_conn.php';
-if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
+if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 ?>
      <!DOCTYPE html>
@@ -10,46 +10,42 @@ if (isset($_SESSION['id']) && isset($_SESSION['user_name'])) {
      <head>
           <title>Μουτζούρης</title>
           <link rel="stylesheet" type="text/css" href="styles/home_style.css">
-
-          <script>
-
+          <script src="./scripts/script_home.js" />
           </script>
      </head>
 
-
-
      <body>
+          <main class="wrapper">
+               <div class="header">
+                    <button onclick="addCard();" class="add_button" id="add-button">Add card test</button>
+                    <div class='user-session'>
+                         <h3 class="current-username">Χρήστης: <?php echo $_SESSION['username']; ?></h3>
+                         <button onclick="location.href = 'auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
+                    </div>
+               </div>
+               <div class="oponent-cards">
 
-          <button onclick="addCard();" class="add_button" id="add_button">Add card test</button>
+               </div>
+               <div class="user-cards-row" id="my-cards">
 
-          <div class="clearfix">
-               <?php
-               $sqlQuery = "SELECT * FROM Kartes";
-               $result = $conn->query($sqlQuery);
-               if ($result->num_rows > 0) {
-                    // output data of each row
-                    while ($row = $result->fetch_assoc()) {
-                         // echo "id: " . $row["id"] . " - CardName: " . $row["cardname"] . " " . $row["cardchar"] . "URL: " . $row["url"] . "<br>";
-                         echo '<div class="img-container">';
-                         echo '<img src="' . $row["url"] . '" alt="Assos">';
-                         echo '</div>';
-                    }
-               } else {
-                    echo "0 results";
-               }
-               ?>
-          </div>
-
-
-          <h3 class="user_who">Χρήστης: <?php echo $_SESSION['name']; ?></h3>
-          <button onclick="location.href = 'auth/logout.php';" id="logout_button" class="logout_button">Αποσύνδεση</button>
+               </div>
+          </main>
 
      </body>
-     <script>
-
-     </script>
 
      </html>
+     <script>
+          <?php
+          $sqlQuery = "SELECT * FROM cards";
+          $result = $conn->query($sqlQuery);
+          if ($result->num_rows > 0) {
+               while ($row = $result->fetch_assoc()) {
+          ?>
+                    addCard(<?php echo json_encode($row) ?>);
+          <?php
+               }
+          } ?>
+     </script>
 
 <?php
 } else {
