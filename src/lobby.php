@@ -13,51 +13,28 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lobby</title>
+        <link rel="stylesheet" href="./styles/main.css">
         <link rel="stylesheet" href="./styles/lobby.css">
+
     </head>
 
     <body>
         <h1>Lobby</h1>
-        <table id="lobby-table">
-            <tr>
-                <th>Νο. Παίκτη</th>
-                <th>Username</th>
-            </tr>
-            <tr>
-                <td>Alfreds Futterkiste</td>
-                <td>Maria Anders</td>
-                <td>Germany</td>
-            </tr>
-        </table>
+        <h2>Δημιουργία παιχνιδιού...</h2>
+        <div class="table-container">
+            <table id="lobby-table">
+                <tr>
+                    <th>Νο. Παίκτη</th>
+                    <th>Username</th>
+                </tr>
+            </table>
+        </div>
+        <p id='game-check'>Χρειάζονται τουλάχιστον 2 παίκτες για να ξεκινήσει το παιχνίδι</p>
+        <button id="start-game" class='disabled' disabled>
+            Έναρξη
+        </button>
     </body>
-
-    <script>
-        function addToTable(uid, username) {
-            const tableRow = document.createElement('tr');
-            const firstColumn = document.createElement('td');
-            const secondColumn = document.createElement('td');
-            firstColumn.innerText = uid;
-            secondColumn.innerText = username;
-            tableRow.appendChild(firstColumn);
-            tableRow.appendChild(secondColumn);
-            document.getElementById('lobby-table').appendChild(tableRow);
-        }
-        setInterval(() => {
-            document.getElementById('lobby-table').innerHTML = `<tr>
-                <th>Νο. Παίκτη</th>
-                <th>Username</th>
-            </tr>`;
-            <?php
-            $sql = "SELECT * FROM game_session";
-            $result = mysqli_query($conn, $sql);
-            while ($row = $result->fetch_assoc()) {
-            ?>
-                addToTable('<?php echo $row['uid'] ?>', '<?php echo $row['username'] ?>')
-            <?php
-            }
-            ?>
-        }, 5000)
-    </script>
+    <script src="./scripts/lobby.js"></script>
 
     </html>
 
@@ -66,4 +43,5 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
     header("Location: index.php");
     exit();
 }
+include('./footer.php');
 ?>

@@ -1,25 +1,16 @@
-* {
-	margin: 0;
-	padding: 0;
-}
-
 body {
 	background: url(/assets/wallpaper.jpg);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	row-gap: 2rem;
 }
 
-table {
-	font-family: arial, sans-serif;
-	border-collapse: collapse;
-	width: 100%;
-}
-
-td,
-th {
-	border: 1px solid #dddddd;
-	text-align: left;
-	padding: 8px;
-}
-
-tr:nth-child(even) {
-	background-color: #dddddd;
+#game-check {
+	font-size: large;
+	color: #eee;
+	max-width: 30rem;
+	text-align: center;
 }
