@@ -4,6 +4,40 @@
 	font-family: sans-serif;
 }
 
+body {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	background: #56a534;
+	padding: 2rem;
+	box-sizing: border-box;
+}
+
+button,
+.current-username {
+	background: #555;
+	padding: 10px 15px;
+	color: #fff;
+	border-radius: 5px;
+	margin-right: 10px;
+	border: none;
+}
+
+.wrapper {
+	width: 108rem;
+	height: 100vh;
+	background-image: url(/assets/home_wallpaper.jpg);
+	background-size: cover;
+	background-repeat: no-repeat;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 h1 {
 	font-size: 2.5rem;
 }
@@ -37,7 +71,6 @@ table th {
 }
 
 button {
-	float: right;
 	background: #555;
 	padding: 10px 15px;
 	color: #eee;
@@ -51,16 +84,38 @@ button:hover {
 }
 
 .table-container {
-	min-height: 15rem;
+	min-height: 10rem;
 }
 
 .footer {
 	position: absolute;
-	bottom: 5rem;
+	bottom: 0;
 	color: #eee;
+	background-color: #4e4e4e;
+	width: 100%;
+	line-height: 1.5rem;
+	text-align: center;
 }
 
 .disabled {
 	cursor: not-allowed;
 	opacity: 0.7;
+}
+
+.header {
+	width: 100%;
+}
+
+.current-username,
+#logout-button {
+	width: fit-content;
+}
+
+.user-session {
+	width: 15rem;
+	display: flex;
+	flex-direction: column;
+	row-gap: 1rem;
+	align-items: flex-end;
+	float: right;
 }

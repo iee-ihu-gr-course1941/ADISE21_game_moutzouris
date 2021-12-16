@@ -1,6 +1,6 @@
 <?php
 session_start();
-include './db/db_conn.php';
+include '../db/db_conn.php';
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 ?>
@@ -9,8 +9,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
      <head>
           <title>Μουτζούρης</title>
-          <link rel="stylesheet" type="text/css" href="styles/home_style.css">
-          <script src="./scripts/script_home.js" />
+          <link rel="stylesheet" type="text/css" href="../styles/main.css">
+          <link rel="stylesheet" type="text/css" href="../styles/home_style.css">
+          <script src="../scripts/script_home.js" />
           </script>
      </head>
 
@@ -20,7 +21,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
                     <button onclick="addCard();" class="add_button" id="add-button">Add card test</button>
                     <div class='user-session'>
                          <h3 class="current-username">Χρήστης: <?php echo $_SESSION['username']; ?></h3>
-                         <button onclick="location.href = 'auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
+                         <button onclick="location.href = '../auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
                     </div>
                </div>
                <div class="oponent-cards">
@@ -34,22 +35,9 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
      </body>
 
      </html>
-     <script>
-          <?php
-          $sqlQuery = "SELECT * FROM cards";
-          $result = $conn->query($sqlQuery);
-          if ($result->num_rows > 0) {
-               while ($row = $result->fetch_assoc()) {
-          ?>
-                    addCard(<?php echo json_encode($row) ?>);
-          <?php
-               }
-          } ?>
-     </script>
-
 <?php
 } else {
-     header("Location: index.php");
+     header("Location: ../index.php");
      exit();
 }
 ?>

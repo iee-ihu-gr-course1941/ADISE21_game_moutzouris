@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS cards;
+
 CREATE TABLE cards
 (
 id int NOT NULL,

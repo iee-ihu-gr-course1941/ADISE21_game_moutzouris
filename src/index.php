@@ -24,7 +24,7 @@
 		<button type="submit">Είσοδος</button>
 	</form>
 
-	<p><?php include 'footer.php'; ?> </p>
+	<p><?php include './pages/footer.php'; ?> </p>
 
 </body>
 

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include './db/db_conn.php';
+include '../db/db_conn.php';
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
 
 ?>
@@ -13,12 +13,19 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Lobby</title>
-        <link rel="stylesheet" href="./styles/main.css">
-        <link rel="stylesheet" href="./styles/lobby.css">
+        <link rel="stylesheet" href="../styles/main.css">
+        <link rel="stylesheet" href="../styles/lobby.css">
+        <script src="../scripts/lobby.js" defer></script>
 
     </head>
 
     <body>
+        <div class="header">
+            <div class='user-session'>
+                <h3 class="current-username">Χρήστης: <?php echo $_SESSION['username']; ?></h3>
+                <button onclick="location.href = '../auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
+            </div>
+        </div>
         <h1>Lobby</h1>
         <h2>Δημιουργία παιχνιδιού...</h2>
         <div class="table-container">
@@ -34,13 +41,12 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
             Έναρξη
         </button>
     </body>
-    <script src="./scripts/lobby.js"></script>
 
     </html>
 
 <?php
 } else {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit();
 }
 include('./footer.php');

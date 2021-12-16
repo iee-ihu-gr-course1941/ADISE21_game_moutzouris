@@ -33,7 +33,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 				$token = generateRandomString(20);
 				$_SESSION['id'] = $token;
 				addUserToSession($username, $row['id'], $token, $conn);
-				header("Location: ../lobby.php");
+				header("Location: ../pages/lobby.php");
 				exit();
 			} else {
 				header("Location: ../index.php?error=Λάθος όνομα χρήστη ή κωδικός");
