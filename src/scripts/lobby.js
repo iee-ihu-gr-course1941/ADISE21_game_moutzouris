@@ -9,6 +9,14 @@ function addPlayerToTable(uid, username) {
 	document.getElementById('lobby-table').appendChild(tableRow);
 }
 
+function startGame() {
+	fetch('/src/api/start_game.php')
+		.then((res) => res.json())
+		.then((data) => {
+			console.log(data);
+		});
+}
+
 function checkAvailablePlayers(players) {
 	const startGameButton = document.getElementById('start-game');
 	const gameCheckLabel = document.getElementById('game-check');
@@ -28,11 +36,14 @@ setInterval(async () => {
         <th>Νο. Παίκτη</th>
         <th>Username</th>
     </tr>`;
-	const players = await fetch('/src/api/lobby.php').then((res) => res.json());
-	players.forEach((player) => {
+	const data = await fetch('/src/api/lobby.php').then((res) => res.json());
+	data.players.forEach((player) => {
 		for (const [uid, username] of Object.entries(player)) {
 			addPlayerToTable(uid, username);
 		}
 	});
-	checkAvailablePlayers(players);
+	if (data.game_status === 'started') {
+		window.location.pathname = '/src/pages/home.php';
+	}
+	checkAvailablePlayers(data.players);
 }, 3000);

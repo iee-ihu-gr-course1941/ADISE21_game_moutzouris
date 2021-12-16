@@ -33,6 +33,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 				$token = generateRandomString(20);
 				$_SESSION['id'] = $token;
 				addUserToSession($username, $row['id'], $token, $conn);
+				initilizeGameStatus();
 				header("Location: ../pages/lobby.php");
 				exit();
 			} else {
@@ -65,4 +66,13 @@ function addUserToSession($username, $uid, $token, $conn)
 	$sql = "INSERT INTO game_session values (default,'$username','$uid','$token')";
 	$result = mysqli_query($conn, $sql);
 	echo $result;
+}
+
+function initilizeGameStatus()
+{
+	global $conn;
+	$sql = "DELETE FROM game_status WHERE id = 1";
+	mysqli_query($conn, $sql);
+	$sql = "INSERT INTO game_status VALUES (1, 'initialized' , 0, 0, 0, NOW())";
+	mysqli_query($conn, $sql);
 }

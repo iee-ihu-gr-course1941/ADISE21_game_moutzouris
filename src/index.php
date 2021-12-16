@@ -1,31 +1,43 @@
-<!DOCTYPE html>
-<html>
+<?php
+session_start();
+if (isset($_SESSION['id'])) {
+	header('Location: ./pages/lobby.php');
+	exit();
+} else {
 
-<head>
-	<title>Είσοδος</title>
-	<link rel="stylesheet" type="text/css" href="styles/main.css">
-	<link rel="stylesheet" type="text/css" href="styles/index_style.css">
-</head>
+?>
 
-<body>
-	<h1 id=game_title>Μουτζούρης</h1>
+	<!DOCTYPE html>
+	<html>
 
-	<form action="auth/login.php" method="post">
-		<h2>Είσοδος</h2>
-		<?php if (isset($_GET['error'])) { ?>
-			<p class="error"><?php echo $_GET['error']; ?></p>
-		<?php } ?>
-		<label>Όνομα Χρήστη</label>
-		<input type="text" name="username" placeholder="User Name"><br>
+	<head>
+		<title>Είσοδος</title>
+		<link rel="stylesheet" type="text/css" href="styles/main.css">
+		<link rel="stylesheet" type="text/css" href="styles/index_style.css">
+	</head>
 
-		<label>Κωδικός</label>
-		<input type="password" name="password" placeholder="Password"><br>
+	<body>
+		<h1 id=game_title>Μουτζούρης</h1>
 
-		<button type="submit">Είσοδος</button>
-	</form>
+		<form action="auth/login.php" method="post">
+			<h2>Είσοδος</h2>
+			<?php if (isset($_GET['error'])) { ?>
+				<p class="error"><?php echo $_GET['error']; ?></p>
+			<?php } ?>
+			<label>Όνομα Χρήστη</label>
+			<input type="text" name="username" placeholder="User Name"><br>
 
-	<p><?php include './pages/footer.php'; ?> </p>
+			<label>Κωδικός</label>
+			<input type="password" name="password" placeholder="Password"><br>
 
-</body>
+			<button type="submit">Είσοδος</button>
+		</form>
 
-</html>
+		<p><?php include './pages/footer.php'; ?> </p>
+
+	</body>
+
+	</html>
+<?php
+}
+?>

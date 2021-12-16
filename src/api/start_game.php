@@ -1,4 +1,5 @@
 <?php
+session_start();
 include('../db/db_conn.php');
 
 // Headers
@@ -30,28 +31,18 @@ function countPlayers()
     $number_of_players = $data['number_of_players'];
 }
 
-function initilizeGameStatus()
-{
-    global $conn, $number_of_players;
-    $sql = "DELETE FROM game_status WHERE id = 1";
-    mysqli_query($conn, $sql);
-    $sql = "INSERT INTO game_status VALUES (1,'initialized',0,$number_of_players,0,default)";
-    mysqli_query($conn, $sql);
-}
-
 //Change game status
-function changeGameStatus($status)
+function changeGameStatus($status, $p_turn, $number_of_players)
 {
     global $conn;
-    $sql = "UPDATE game_status SET status = '$status' WHERE id = 1";
+    $sql = "UPDATE game_status SET status = '$status' , p_turn=$p_turn,number_of_players=$number_of_players WHERE id = 1";
     mysqli_query($conn, $sql);
 }
-
 
 shuffleCards();
 countPlayers();
-initilizeGameStatus();
-changeGameStatus('started');
+changeGameStatus('started', 1, $number_of_players);
+$_SESSION['game_status'] = 'started';
 
 
 echo json_encode($cardIds);

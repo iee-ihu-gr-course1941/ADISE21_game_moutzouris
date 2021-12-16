@@ -1,8 +1,11 @@
 <?php
-session_start();
 include '../db/db_conn.php';
+session_start();
 if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
-
+if (isset($_SESSION['game_status']) && $_SESSION['game_status'] == 'started'){
+    header('Location: ./home.php');
+    exit();
+}
 ?>
 
     <!DOCTYPE html>
@@ -37,7 +40,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
             </table>
         </div>
         <p id='game-check'>Χρειάζονται τουλάχιστον 2 παίκτες για να ξεκινήσει το παιχνίδι</p>
-        <button id="start-game" class='disabled' disabled>
+        <button id="start-game" class='disabled' onclick="startGame()" disabled>
             Έναρξη
         </button>
     </body>
