@@ -2,10 +2,9 @@
 include "../db/db_conn.php";
 session_start();
 
-if (isset($_SESSION['id'])) {
-    $token = $_SESSION['id'];
-    $sql = "DELETE FROM game_session WHERE userToken='$token'";
-    $result = mysqli_query($conn, $sql);
+if (isset($_SESSION['session_id'])) {
+    $sql = "DELETE FROM game_session WHERE user_token='{$_SESSION['session_id']}'";
+    mysqli_query($conn, $sql);
 }
 
 session_unset();

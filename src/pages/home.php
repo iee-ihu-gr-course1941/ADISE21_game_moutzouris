@@ -1,7 +1,7 @@
 <?php
 include '../db/db_conn.php';
 session_start();
-if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
+if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 ?>
      <!DOCTYPE html>
      <html>
@@ -10,7 +10,7 @@ if (isset($_SESSION['id']) && isset($_SESSION['username'])) {
           <title>Μουτζούρης</title>
           <link rel="stylesheet" type="text/css" href="../styles/main.css">
           <link rel="stylesheet" type="text/css" href="../styles/home_style.css">
-          <script src="../scripts/script_home.js" defer> </script>
+          <script src="../scripts/game_table.js" defer> </script>
      </head>
 
      <body>

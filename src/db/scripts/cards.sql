@@ -5,7 +5,8 @@ CREATE TABLE cards
 id int NOT NULL,
 cardname varchar(255) NOT NULL,
 cardchar varchar(255) NOT NULL,
-url varchar(2000) NOT NULL
+url varchar(2000) NOT NULL,
+PRIMARY KEY(id)
 );
 
 INSERT INTO cards VALUES (1, 'ace', 'clubs','https://upload.wikimedia.org/wikipedia/commons/3/36/Playing_card_club_A.svg' );
