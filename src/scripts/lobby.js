@@ -5,8 +5,6 @@ if (window.location.hostname == 'users.iee.ihu.gr') {
 	url = '/src'
 }
 
-
-
 function addPlayerToTable(uid, username) {
 	const tableRow = document.createElement('tr');
 	const firstColumn = document.createElement('td');
@@ -19,7 +17,7 @@ function addPlayerToTable(uid, username) {
 }
 
 function startGame() {
-	fetch('/src/api/start_game.php')
+	fetch(`${url}/api/start_game.php`)
 		.then((res) => res.json())
 		.then((data) => {
 			console.log(data);

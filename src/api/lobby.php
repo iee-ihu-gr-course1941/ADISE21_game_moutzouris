@@ -44,7 +44,7 @@ function getAvailableSession()
     $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session GROUP BY session_id";
     $result = mysqli_query($conn, $sql);
     while ($row = $result->fetch_assoc()) {
-        if ($row['number_of_players'] < 4) {
+        if ($row['number_of_players'] < 2) {
             //Return the available session
             return $row['session_id'];
         }
