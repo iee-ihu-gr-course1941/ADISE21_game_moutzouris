@@ -36,7 +36,7 @@ setInterval(async () => {
         <th>Νο. Παίκτη</th>
         <th>Username</th>
     </tr>`;
-	const data = await fetch('/~it154486/ADISE21_game_moutzouris/src/api/src/api/lobby.php').then((res) => res.json());
+	const data = await fetch('/~it154486/ADISE21_game_moutzouris/src/api/lobby.php').then((res) => res.json());
 	data.players.forEach((player) => {
 		for (const [uid, username] of Object.entries(player)) {
 			addPlayerToTable(uid, username);
