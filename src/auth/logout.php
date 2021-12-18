@@ -3,7 +3,7 @@ include "../db/db_conn2.php";
 session_start();
 
 if (isset($_SESSION['session_id'])) {
-    $sql = "DELETE FROM game_session WHERE user_token='{$_SESSION['session_id']}'";
+    $sql = "DELETE FROM game_session WHERE user_token='{$_SESSION['user_token']}'";
     mysqli_query($conn, $sql);
 }
 
