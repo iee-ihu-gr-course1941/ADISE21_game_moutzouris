@@ -43,7 +43,7 @@ setInterval(async () => {
 		}
 	});
 	if (data.game_status === 'started') {
-		window.location.pathname = '/src/pages/home.php';
+		window.location.pathname = '/~it154486/ADISE21_game_moutzouris/src/pages/home.php';
 	}
 	checkAvailablePlayers(data.players);
 }, 3000);
