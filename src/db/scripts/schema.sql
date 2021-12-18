@@ -69,14 +69,6 @@ CREATE TABLE game_status (
     PRIMARY KEY (id)
 );
 
-DELIMITER $ $ CREATE TRIGGER game_status_update BEFORE
-UPDATE
-    ON game_status FOR EACH ROW BEGIN
-SET
-    NEW.last_change = NOW();
-
-END $ $ DELIMITER;
-
 CREATE TABLE current_cards (
     `id` int NOT NULL AUTO_INCREMENT,
     `cardId` int NOT NULL,
