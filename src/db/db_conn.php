@@ -2,7 +2,7 @@
 
 $host = "localhost";
 $username = "root";
-$password = "";
+$password = "sakasaka";
 $db_name = "moutzouris";
 
 $conn = new mysqli($host, $username, $password, $db_name, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../db/db_conn2.php";
+include "../db/db_conn.php";
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
 
