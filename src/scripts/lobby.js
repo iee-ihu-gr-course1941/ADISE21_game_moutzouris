@@ -10,7 +10,7 @@ function addPlayerToTable(uid, username) {
 }
 
 function startGame() {
-	fetch('/src/api/start_game.php')
+	fetch('/~it154486/ADISE21_game_moutzouris/src/api/start_game.php')
 		.then((res) => res.json())
 		.then((data) => {
 			console.log(data);
