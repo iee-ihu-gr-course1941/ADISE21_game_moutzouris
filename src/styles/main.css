@@ -29,7 +29,7 @@ button,
 .wrapper {
 	width: 108rem;
 	height: 100vh;
-	background-image: url(/assets/home_wallpaper.jpg);
+	background-image: url(../assets/home_wallpaper.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
 	position: relative;
