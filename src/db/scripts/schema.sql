@@ -48,7 +48,7 @@ CREATE TABLE game_session (
     `session_id` int,
     `username` varchar(255) NOT NULL,
     `user_id` int NOT NULL,
-    `user_turn` enum(1, 2, 3, 4),
+    `user_turn` enum('1', '2', '3', '4'),
     `user_token` varchar(20) NOT NULL,
     PRIMARY KEY (id)
 );
