@@ -18,8 +18,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
         <title>Lobby</title>
         <link rel="stylesheet" href="../styles/main.css">
         <link rel="stylesheet" href="../styles/lobby.css">
-
-
     </head>
 
     <body>
