@@ -22,6 +22,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                     </div>
                </div>
                <div class="oponent-cards">
+                    <div class="player1" id="player1" onclick="center()"></div>
+                    <div class="player1"></div>
+                    <div class="player1"></div>
 
                </div>
                <div class="user-cards-row" id="my-cards">

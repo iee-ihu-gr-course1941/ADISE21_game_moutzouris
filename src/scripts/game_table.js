@@ -11,3 +11,7 @@ function addCard(cardData) {
 
 	document.getElementById('my-cards').appendChild(newCard);
 }
+
+function center() {
+	document.getElementById("player1").classList.toggle('centered-oponent');
+}

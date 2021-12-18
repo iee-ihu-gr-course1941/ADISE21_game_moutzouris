@@ -3,6 +3,28 @@
 	padding: 0;
 }
 
+.oponent-cards {
+	width: 90%;
+	height: 15rem;
+	background-color: aqua;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	align-items: center;
+}
+
+.oponent-cards > div {
+	height: 15rem;
+	width: 20rem;
+	background-color: red;
+}
+
+.centered-oponent {
+	position: absolute;
+	top: 40vh;
+	width: 150rem;
+}
+
 .user-cards-row {
 	width: 60%;
 	height: 10rem;
