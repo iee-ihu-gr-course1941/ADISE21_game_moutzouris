@@ -44,7 +44,6 @@ setInterval(async () => {
         <th>Username</th>
     </tr>`;
 	const data = await fetch(`${url}/api/lobby.php`).then((res) => res.json());
-	console.log(data);
 	data.players.forEach((player) => {
 		for (const [uid, username] of Object.entries(player)) {
 			addPlayerToTable(uid, username);
