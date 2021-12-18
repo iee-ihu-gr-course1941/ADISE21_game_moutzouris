@@ -80,7 +80,7 @@ function checkGameInstance($session_id)
 function addUserToSession($session_id)
 {
     global $conn;
-    $sql = "INSERT INTO game_session values (default,$session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', '{$_SESSION['user_token']}')";
+    $sql = "INSERT INTO game_session values (default,$session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
     mysqli_query($conn, $sql);
     $_SESSION['session_id'] = $session_id;
     checkGameInstance($session_id);

@@ -1,3 +1,12 @@
+let url;
+if (window.location.hostname == 'users.iee.ihu.gr') {
+	url = '/~it154486/ADISE21_game_moutzouris/src'
+} else {
+	url = '/src'
+}
+
+
+
 function addPlayerToTable(uid, username) {
 	const tableRow = document.createElement('tr');
 	const firstColumn = document.createElement('td');
@@ -10,7 +19,7 @@ function addPlayerToTable(uid, username) {
 }
 
 function startGame() {
-	fetch('/~it154486/ADISE21_game_moutzouris/src/api/start_game.php')
+	fetch('/src/api/start_game.php')
 		.then((res) => res.json())
 		.then((data) => {
 			console.log(data);
@@ -36,7 +45,7 @@ setInterval(async () => {
         <th>Νο. Παίκτη</th>
         <th>Username</th>
     </tr>`;
-	const data = await fetch('/~it154486/ADISE21_game_moutzouris/src/api/lobby.php').then((res) => res.json());
+	const data = await fetch(`${url}/api/lobby.php`).then((res) => res.json());
 	console.log(data);
 	data.players.forEach((player) => {
 		for (const [uid, username] of Object.entries(player)) {
@@ -44,7 +53,7 @@ setInterval(async () => {
 		}
 	});
 	if (data.game_status === 'started') {
-		window.location.pathname = '/~it154486/ADISE21_game_moutzouris/src/pages/home.php';
+		window.location.pathname = `${url}/pages/home.php`;
 	}
 	checkAvailablePlayers(data.players);
 }, 3000);
