@@ -18,7 +18,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
         <title>Lobby</title>
         <link rel="stylesheet" href="../styles/main.css">
         <link rel="stylesheet" href="../styles/lobby.css">
-        <script src="../scripts/lobby.js" defer></script>
+
 
     </head>
 
@@ -44,6 +44,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
             Έναρξη
         </button>
     </body>
+    <script src="../scripts/lobby.js"></script>
 
     </html>
 
