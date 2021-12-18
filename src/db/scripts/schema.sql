@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS moutzouris;
+
 CREATE DATABASE moutzouris;
 
 DROP TABLE IF EXISTS game_status;
