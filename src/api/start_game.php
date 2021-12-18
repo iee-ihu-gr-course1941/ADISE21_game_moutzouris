@@ -12,14 +12,14 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 //Select all cards and shuffle them
 function shuffleCards()
 {
-    global $conn, $cardIds;
-    $sql = "SELECT id FROM cards WHERE cardchar != 'back'";
+    global $conn;
+    $sql = "SELECT id, cardname FROM cards WHERE cardchar != 'back'";
 
     $result = mysqli_query($conn, $sql);
 
-    $cardIds = $result->fetch_all();
-    shuffle($cardIds);
-    return $cardIds;
+    $cards = $result->fetch_all();
+    shuffle($cards);
+    return $cards;
 }
 
 //Select all players from game_session and count them
@@ -32,19 +32,7 @@ function getSessionPlayers()
     return $data['number_of_players'];
 }
 
-//Change game status
-function changeGameStatus($number_of_players)
-{
-    global $conn;
-    $sql = "UPDATE game_status SET status = 'started', number_of_players=$number_of_players WHERE session_id='{$_SESSION['session_id']}'";
-    $result = mysqli_query($conn, $sql);
-    if (!empty($result)) {
-        $_SESSION['game_status'] = 'started';
-        return true;
-    }
-}
-
-
+//Update turns of players in game_session
 function arrangeTurns()
 {
     global $conn;
@@ -62,6 +50,7 @@ function arrangeTurns()
     return $player_turns;
 }
 
+//Deal shuffled cards to players an put them in current_cards table
 function dealCards($shuffledCards, $player_turns)
 {
     global $conn;
@@ -71,9 +60,9 @@ function dealCards($shuffledCards, $player_turns)
     $number_of_players = count($player_turns);
 
     $i = 1;
-    foreach ($shuffledCards as $key => $card_id) {
+    foreach ($shuffledCards as $key => $card) {
         $user_id = array_keys($player_turns[$i - 1])[0];
-        $sql = "INSERT INTO current_cards values (default, '$card_id[0]','$user_id','{$_SESSION['session_id']}')";
+        $sql = "INSERT INTO current_cards values (default, '$card[0]', '$card[1]','$user_id','{$_SESSION['session_id']}')";
         mysqli_query($conn, $sql);
         if ($i >= $number_of_players) {
             $i = 1;
@@ -83,10 +72,21 @@ function dealCards($shuffledCards, $player_turns)
     }
 }
 
+//Change game status
+function changeGameStatus($number_of_players)
+{
+    global $conn;
+    $sql = "UPDATE game_status SET status = 'started', number_of_players=$number_of_players WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
+    if (!empty($result)) {
+        $_SESSION['game_status'] = 'started';
+    }
+}
+
 $shuffledCards = shuffleCards();
 $number_of_players = getSessionPlayers();
-// changeGameStatus($number_of_players);
 $player_turns = arrangeTurns();
 dealCards($shuffledCards, $player_turns);
+changeGameStatus($number_of_players);
 
 echo json_encode($shuffledCards);

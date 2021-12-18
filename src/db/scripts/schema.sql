@@ -61,7 +61,7 @@ CREATE TABLE game_status (
         'ended',
         'aborded'
     ) NOT NULL DEFAULT 'initialized',
-    `p_turn` int NOT NULL DEFAULT 1,
+    `player_turn` int NOT NULL DEFAULT 1,
     `number_of_players` int NOT NULL,
     `winner` int DEFAULT NULL,
     `last_change` timestamp DEFAULT NOW(),
@@ -71,8 +71,9 @@ CREATE TABLE game_status (
 
 CREATE TABLE current_cards (
     `id` int NOT NULL AUTO_INCREMENT,
-    `cardId` int NOT NULL,
-    `player_turn` int NOT NULL,
+    `card_id` int NOT NULL,
+    `card_name` varchar(255) NOT NULL,
+    `player_id` int NOT NULL,
     `session_id` int NOT NULL,
     PRIMARY KEY(id)
 );

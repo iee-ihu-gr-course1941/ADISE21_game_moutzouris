@@ -50,7 +50,7 @@ setInterval(async () => {
 		}
 	});
 	if (data.game_status === 'started') {
-		window.location.pathname = `${url}/pages/home.php`;
+		window.location.pathname = `${url}/pages/board.php`;
 	}
 	checkAvailablePlayers(data.players);
 }, 3000);

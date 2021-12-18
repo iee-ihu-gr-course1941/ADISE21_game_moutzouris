@@ -9,8 +9,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
      <head>
           <title>Μουτζούρης</title>
           <link rel="stylesheet" type="text/css" href="../styles/main.css">
-          <link rel="stylesheet" type="text/css" href="../styles/home_style.css">
-          <script src="../scripts/game_table.js" defer> </script>
+          <link rel="stylesheet" type="text/css" href="../styles/board.css">
      </head>
 
      <body>
@@ -33,6 +32,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
           </main>
 
      </body>
+
+     <script src="../scripts/game_table.js" defer> </script>
 
      </html>
 <?php
