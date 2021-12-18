@@ -2,6 +2,8 @@ DROP DATABASE IF EXISTS moutzouris;
 
 CREATE DATABASE moutzouris;
 
+USE moutzouris;
+
 DROP TABLE IF EXISTS game_status;
 
 DROP TABLE IF EXISTS game_session;
@@ -15,55 +17,55 @@ DROP trigger IF EXISTS game_status_update;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    id int NOT NULL AUTO_INCREMENT,
-    username varchar(255) NOT NULL,
-    password varchar(255) NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `username` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
 INSERT INTO
-    users
+    `users`
 VALUES
     (default, 'panos', 'abc');
 
 INSERT INTO
-    users
+    `users`
 VALUES
     (default, 'miltos', 'abc');
 
 INSERT INTO
-    users
+    `users`
 VALUES
     (default, 'stavros', 'abc');
 
 INSERT INTO
-    users
+    `users`
 VALUES
     (default, 'petros', 'abc');
 
 CREATE TABLE game_session (
-    id int NOT NULL AUTO_INCREMENT,
-    session_id int,
-    username varchar(255) NOT NULL,
-    user_id int NOT NULL,
-    user_turn enum(1, 2, 3, 4),
-    user_token varchar(20) NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `session_id` int,
+    `username` varchar(255) NOT NULL,
+    `user_id` int NOT NULL,
+    `user_turn` enum(1, 2, 3, 4),
+    `user_token` varchar(20) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE game_status (
-    id int NOT NULL AUTO_INCREMENT,
-    status enum(
+    `id` int NOT NULL AUTO_INCREMENT,
+    `status` enum(
         'initialized',
         'started',
         'ended',
         'aborded'
     ) NOT NULL DEFAULT 'initialized',
-    p_turn int NOT NULL DEFAULT 1,
-    number_of_players int NOT NULL,
-    winner int DEFAULT NULL,
-    last_change timestamp DEFAULT NOW(),
-    session_id int not null,
+    `p_turn` int NOT NULL DEFAULT 1,
+    `number_of_players` int NOT NULL,
+    `winner` int DEFAULT NULL,
+    `last_change` timestamp DEFAULT NOW(),
+    `session_id` int not null,
     PRIMARY KEY (id)
 );
 
@@ -76,18 +78,18 @@ SET
 END $ $ DELIMITER;
 
 CREATE TABLE current_cards (
-    id int NOT NULL AUTO_INCREMENT,
-    cardId int NOT NULL,
-    player_turn int NOT NULL,
-    session_id int NOT NULL,
+    `id` int NOT NULL AUTO_INCREMENT,
+    `cardId` int NOT NULL,
+    `player_turn` int NOT NULL,
+    `session_id` int NOT NULL,
     PRIMARY KEY(id)
 );
 
 CREATE TABLE cards (
-    id int NOT NULL,
-    cardname varchar(255) NOT NULL,
-    cardchar varchar(255) NOT NULL,
-    url varchar(2000) NOT NULL,
+    `id` int NOT NULL,
+    `cardname` varchar(255) NOT NULL,
+    `cardchar` varchar(255) NOT NULL,
+    `url` varchar(2000) NOT NULL,
     PRIMARY KEY(id)
 );
 
