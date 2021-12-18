@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../db/db_conn.php');
+include('../db/db_conn2.php');
 
 // Headers
 header('Access-Control-Allow-Origin: *');
@@ -17,7 +17,7 @@ function getGameState()
     $result = mysqli_query($conn, $sql);
     $data = $result->fetch_assoc();
     //Check if there is a game instance
-    if(isset($data['status'])){
+    if (isset($data['status'])) {
         return $data;
     }
 }

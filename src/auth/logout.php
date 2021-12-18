@@ -1,5 +1,5 @@
 <?php
-include "../db/db_conn.php";
+include "../db/db_conn2.php";
 session_start();
 
 if (isset($_SESSION['session_id'])) {
