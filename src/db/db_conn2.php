@@ -10,7 +10,7 @@ $pass = $DB_PASS;
 if (gethostname() == 'users.iee.ihu.gr') {
     $conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');
 } else {
-    $conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');
+    $conn = new mysqli($host, $user, $pass, $db);
 }
 
 if ($conn->connect_errno) {
