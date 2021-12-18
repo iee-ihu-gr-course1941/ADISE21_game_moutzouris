@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('../db/db_conn.php');
+include('../db/db_conn2.php');
 
 // Headers
 header('Access-Control-Allow-Origin: *');
