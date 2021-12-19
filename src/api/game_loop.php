@@ -13,7 +13,7 @@ global $conn;
 function getShuffledCards()
 {
     global $conn;
-    $sql = "SELECT card_id, card_name, player_id FROM current_cards WHERE session_id='{$_SESSION['session_id']}'";
+    $sql = "SELECT card_id, card_name, player_id, player_turn, url FROM current_cards INNER JOIN cards ON cards.id=current_cards.card_id WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     $cards = array();
     while ($card = $result->fetch_assoc()) {
@@ -22,11 +22,11 @@ function getShuffledCards()
     return $cards;
 }
 
-function splitCardsByUser($shuffledCards)
+function splitCardsByUser($shuffled_cards)
 {
     $cards_by_user = array();
-    foreach ($shuffledCards as $value) {
-        $cards_by_user[$value['player_id']][] = $value;
+    foreach ($shuffled_cards as $value) {
+        $cards_by_user[$value['player_turn']][] = $value;
     }
     return $cards_by_user;
 }
@@ -34,15 +34,24 @@ function splitCardsByUser($shuffledCards)
 function getGameState()
 {
     global $conn;
-    $sql = "SELECT status, user_turn, number_of_players, last_change FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
+    $sql = "SELECT status, player_turn, number_of_players, last_change FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result->fetch_assoc();
 }
 
-$shuffledCards = getShuffledCards();
-$cards_by_user = splitCardsByUser($shuffledCards);
-$game_state = getGameState();
+function getPlayerTurn()
+{
+    global $conn;
+    $sql = "SELECT player_turn FROM game_session WHERE session_id='{$_SESSION['session_id']}' AND user_token='{$_SESSION['user_token']}'";
+    $result = mysqli_query($conn, $sql);
+    return $result->fetch_assoc()['player_turn'];
+}
 
-$response = array('cards' => $cards_by_user, 'game_state' => $game_state);
+$shuffled_cards = getShuffledCards();
+$cards_by_user = splitCardsByUser($shuffled_cards);
+$game_state = getGameState();
+$player_turn = getPlayerTurn();
+
+$response = array('game_state' => array_merge(array('my_turn' => $player_turn), $game_state), 'player_cards' => $cards_by_user);
 
 echo json_encode($response);
