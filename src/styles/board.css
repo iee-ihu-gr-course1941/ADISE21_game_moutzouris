@@ -11,17 +11,33 @@
 	flex-direction: row;
 	justify-content: space-evenly;
 	align-items: center;
+	column-gap: 5rem;
 }
 
-#oponent-cards > div {
+#oponent-cards > div > div {
 	height: 15rem;
-	min-width: 30%;
-	max-width: 25%;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
 	transform: rotate(180deg);
+}
+
+.oponent-container {
+	max-width: 30%;
+}
+
+.oponent-container > h2 {
+	text-align: center;
+	color: #eee;
+	background-color: rgb(167, 46, 46);
+	border-radius: 0.5rem;
+	line-height: 2rem;
+}
+
+.current-player {
+	background-color: rgb(57, 209, 118) !important;
+	color: #fff !important;
 }
 
 .centered-oponent {
@@ -47,6 +63,7 @@
 .card-container {
 	flex: 1 0 0;
 	overflow-x: hidden;
+	cursor: pointer;
 }
 .card-container:last-child {
 	flex: 0 0 auto;

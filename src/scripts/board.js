@@ -9,13 +9,20 @@ function checkStateChanged(new_game_state) {
 	const stateChanged = new_game_state.last_change != gameState.last_change;
 	if (stateChanged) {
 		gameState = { ...new_game_state };
+		console.log('changed');
 		updateCurrentPlayer();
 	}
 	return stateChanged;
 }
 
-function updateCurrentPlayer(turn) {
-	document.getElementById('current-turn').innerHTML = turn || gameState.player_turn;
+function updateCurrentPlayer() {
+	if (gameState.my_turn == gameState.player_turn) {
+		document.getElementById('current-turn').innerHTML = 'Εγώ';
+	} else {
+		document.getElementById('current-turn').innerHTML = gameState.player_turn;
+	}
+	document.getElementById(`name-header-${parseInt(gameState.player_turn) - 1 || parseInt(gameState.number_of_players)}`)?.classList.toggle('current-player');
+	document.getElementById(`name-header-${parseInt(gameState.player_turn)}`)?.classList.toggle('current-player');
 }
 
 function gameLoop(state) {
@@ -27,7 +34,7 @@ function gameLoop(state) {
 
 		let i = parseInt(my_turn) + 1;
 		let finished = false;
-		console.log(state.player_cards);
+
 		while (!finished) {
 			if (i == my_turn) {
 				finished = true;
@@ -40,10 +47,6 @@ function gameLoop(state) {
 			}
 		}
 	}
-	if (gameState.my_turn == gameState.player_turn) {
-		updateCurrentPlayer('Εγώ');
-	}
-	// console.log(gameState)
 }
 
 async function center() {
