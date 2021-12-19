@@ -15,15 +15,22 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
      <body>
           <main class="wrapper">
                <div class="header">
+                    <div class='player-turn-container'>
+                         <div>
+                              <h2>Σειρά παίκτη: &nbsp;</h2>
+                              <h2 id="current-turn">1</h2>
+                         </div>
+                         <div>
+                              <h3>Η σειρά μου: &nbsp;</h3>
+                              <h3 id="player-turn">1</h3>
+                         </div>
+                    </div>
                     <div class='user-session'>
                          <h3 class="current-username">Χρήστης: <?php echo $_SESSION['username']; ?></h3>
                          <button onclick="location.href = '../auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
                     </div>
                </div>
-               <div class="oponent-cards">
-                    <div class="player1" id="player1" onclick="center()"></div>
-                    <div class="player1"></div>
-                    <div class="player1"></div>
+               <div id="oponent-cards">
 
                </div>
                <div class="user-cards-row" id="my-cards">
@@ -32,8 +39,19 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
           </main>
 
      </body>
+     <script>
+          let gameState = {
+               player_turn: undefined,
+               my_turn: undefined,
+               user_id: undefined,
+               number_of_players: undefined,
+               last_change: undefined,
+               status: undefined,
+          };
+     </script>
 
-     <script src="../scripts/game_table.js" defer> </script>
+     <script src="../scripts/render_board.js"> </script>
+     <script src="../scripts/board.js"> </script>
 
      </html>
 <?php
