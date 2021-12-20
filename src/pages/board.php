@@ -10,6 +10,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
           <title>Μουτζούρης</title>
           <link rel="stylesheet" type="text/css" href="../styles/main.css">
           <link rel="stylesheet" type="text/css" href="../styles/board.css">
+          <link rel="icon" type="image/x-icon" href="../../assets/king.png">
      </head>
 
      <body>
@@ -36,6 +37,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                <div class="user-cards-row" id="my-cards">
 
                </div>
+               <!-- <button onclick="check()">Saka saka</button> -->
           </main>
 
      </body>
@@ -48,6 +50,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                last_change: undefined,
                status: undefined,
           };
+
+
+          let selectedCards = [];
      </script>
 
      <script src="../scripts/render_board.js"> </script>

@@ -24,7 +24,17 @@
 }
 
 .oponent-container {
-	max-width: 30%;
+	max-width: 100%;
+}
+
+.players-2 {
+	max-width: 100%;
+}
+.players-3 {
+	max-width: 50%;
+}
+.players-4 {
+	max-width: 33%;
 }
 
 .oponent-container > h2 {
@@ -40,6 +50,10 @@
 	color: #fff !important;
 }
 
+.my-turn {
+	color: rgb(57, 209, 118) !important;
+}
+
 .centered-oponent {
 	position: absolute;
 	top: 40vh;
@@ -48,22 +62,37 @@
 
 .user-cards-row {
 	width: 90%;
-	height: 15rem;
+	height: 16.5rem;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 	padding: 1rem 0;
 	column-gap: 0.2rem;
-	overflow-x: auto;
+	overflow-x: hidden;
 	overflow-y: hidden;
 	box-sizing: border-box;
 	bottom: 25rem;
 	position: absolute;
 }
+
+.user-cards-row > div {
+	transition: 0.2s all ease-in-out;
+}
+
 .card-container {
 	flex: 1 0 0;
 	overflow-x: hidden;
 	cursor: pointer;
+}
+.card-container > img {
+	border-radius: 0.6rem;
+	transition: 0.2s all ease-in-out;
+	box-sizing: border-box;
+	border: 0.05rem solid transparent;
+}
+
+.card-container > img:hover {
+	border: 0.2rem solid rgba(37, 197, 77, 0.844);
 }
 .card-container:last-child {
 	flex: 0 0 auto;
@@ -96,4 +125,9 @@
 	flex-direction: row;
 	justify-content: space-between;
 	margin-bottom: 2rem;
+}
+
+.selected-card {
+	position: relative;
+	transform: translate(0, -1.5rem);
 }
