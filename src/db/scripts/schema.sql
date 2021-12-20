@@ -48,7 +48,7 @@ CREATE TABLE game_session (
     `session_id` int,
     `username` varchar(255) NOT NULL,
     `user_id` int NOT NULL,
-    `user_turn` enum('1', '2', '3', '4'),
+    `player_turn` enum('1', '2', '3', '4'),
     `user_token` varchar(20) NOT NULL,
     PRIMARY KEY (id)
 );
@@ -59,7 +59,7 @@ CREATE TABLE game_status (
         'initialized',
         'started',
         'ended',
-        'aborded'
+        'aborted'
     ) NOT NULL DEFAULT 'initialized',
     `player_turn` int NOT NULL DEFAULT 1,
     `number_of_players` int NOT NULL,
@@ -74,6 +74,7 @@ CREATE TABLE current_cards (
     `card_id` int NOT NULL,
     `card_name` varchar(255) NOT NULL,
     `player_id` int NOT NULL,
+    `player_turn` enum('1', '2', '3', '4'),
     `session_id` int NOT NULL,
     PRIMARY KEY(id)
 );
@@ -353,7 +354,7 @@ VALUES
         27,
         'seven',
         'hearts',
-        'https://upload.wikimedia.org/wikipedia/commons/c/cd/Playing_card_heart_6.svg'
+        'https://upload.wikimedia.org/wikipedia/commons/9/94/Playing_card_heart_7.svg'
     );
 
 INSERT INTO

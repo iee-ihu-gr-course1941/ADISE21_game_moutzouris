@@ -15,7 +15,7 @@ function checkIfPlayerInSession()
     if (isset($_SESSION['user_id'])) {
 
         //Check if player is already in a session
-        $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}'";
+        $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
         $result = mysqli_query($conn, $sql);
         $data = $result->fetch_assoc();
 
@@ -41,7 +41,7 @@ function getAvailableSession()
 {
     global $conn;
     //Get all sessions with under 4 players
-    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session GROUP BY session_id";
+    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";
     $result = mysqli_query($conn, $sql);
     while ($row = $result->fetch_assoc()) {
         if ($row['number_of_players'] < 4) {
@@ -50,8 +50,9 @@ function getAvailableSession()
         }
     }
 
+
     //There are no availble sessions, so create a new session
-    $sql = "SELECT max(session_id) as last_session_id FROM game_session";
+    $sql = "SELECT max(id) as last_session_id FROM game_status";
     $result = mysqli_query($conn, $sql);
     $data = $result->fetch_assoc();
     $current_session = $data['last_session_id'] + 1;
@@ -66,7 +67,7 @@ function checkGameInstance($session_id)
 {
     global $conn;
     //Check if instance of game is already initialized or initialize one
-    $sql = "SELECT * FROM game_status WHERE session_id='$session_id'";
+    $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
     $result = mysqli_query($conn, $sql);
     $data = $result->fetch_assoc();
 
@@ -80,7 +81,7 @@ function checkGameInstance($session_id)
 function addUserToSession($session_id)
 {
     global $conn;
-    $sql = "INSERT INTO game_session values (default,$session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
+    $sql = "INSERT INTO game_session values (default, $session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
     mysqli_query($conn, $sql);
     $_SESSION['session_id'] = $session_id;
     checkGameInstance($session_id);
