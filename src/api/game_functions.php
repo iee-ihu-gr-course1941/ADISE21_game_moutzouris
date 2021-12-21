@@ -37,15 +37,14 @@ switch ($r = array_shift($request)) {
                 }
                 break;
             case 'discard-cards':
+                checkIfPlayerFinished($request[0]);
+
                 if (discard_cards($request[0], $request[1], $request[2])) {
+                    checkGameEnded();
                     echo json_encode(array('status' => '200'));
                 } else {
                     echo json_encode(array('status' => '404'));
                 }
-                break;
-            case 'check-game-ended':
-                checkGameEnded();
-                echo json_encode(array('saka' => 'false'));
                 break;
             default:
                 header("HTTP/1.1 404 Not Found");
@@ -116,7 +115,7 @@ function checkIfPlayerFinished($player_turn)
     global $conn;
     $sql = "SELECT * from current_cards WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_array();
+    $data = $result->fetch_all();
     if (count($data) == 2) {
         $winnerExists = checkIfWinnerExists();
         if (!$winnerExists) {
@@ -157,16 +156,7 @@ function checkGameEnded()
         if (count($cards) == 1 && $cards[0] == 'king') {
             $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
             $result = mysqli_query($conn, $sql);
-        } else if (count($cards) == 0) {
-            //Check if there is a winner
-            $sql = "SELECT * FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
-            $result = mysqli_query($conn, $sql)['winner'];
-            //If there is no winner, assing one
-            if ($result == '0') {
-                $sql = "UPDATE game_status SET winner='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
-                $result = mysqli_query($conn, $sql);
-            } else {
-            }
+            endGame();
         }
     }
     //Update last change in game_status
@@ -176,7 +166,6 @@ function checkGameEnded()
 function endGame()
 {
     global $conn;
-
     $sql = "UPDATE game_status SET status='ended' WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result;

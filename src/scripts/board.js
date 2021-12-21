@@ -10,7 +10,8 @@ function checkStateChanged(new_game_state) {
 	if (stateChanged) {
 		serverState = { ...new_game_state };
 		updateCurrentPlayer();
-		activateDelay(6);
+		const lastChangeDate = getLastChangeDate();
+		activateDelay(lastChangeDate, 8);
 	}
 	return stateChanged;
 }
@@ -57,20 +58,25 @@ function gameLoop(state) {
 	}
 }
 
-function activateDelay(seconds) {
-	if (!clientState.roundEnabled) {
-		clientState.roundEnabled = true;
-		document.getElementById('countdown').style.display = 'flex';
-		document.getElementById('countdown-seconds').innerText = `${seconds} δευτερόλεπτα`;
-		const tick = setInterval(() => {
-			document.getElementById('countdown-seconds').innerText = `${seconds} δευτερόλεπτα`;
-			seconds--;
-		}, 1000);
-		setTimeout(() => {
-			clientState.roundEnabled = false;
-			clearInterval(tick);
-			document.getElementById('countdown').style.display = 'none';
-		}, seconds * 1000 + 1000);
+function activateDelay(last_change, seconds) {
+	let secondsRemaining = Math.ceil((last_change + seconds * 1000 - Date.now()) / 1000);
+	if (secondsRemaining > 0) {
+		if (!clientState.roundEnabled) {
+			document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
+			clientState.roundEnabled = true;
+			document.getElementById('countdown').style.display = 'flex';
+			let finished = false;
+			const tick = setInterval(() => {
+				document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
+				secondsRemaining--;
+				if (secondsRemaining == 0) {
+					finished = true;
+					clientState.roundEnabled = false;
+					document.getElementById('countdown').style.display = 'none';
+					clearInterval(tick);
+				}
+			}, 1000);
+		}
 	}
 }
 
@@ -79,16 +85,24 @@ function stateUpdate() {
 		.then((res) => res.json())
 		.then((state) => {
 			gameLoop(state);
+			// console.log(state);
 		})
 		.catch((err) => {
 			console.log(err);
 		});
 }
 stateUpdate().then(() => {
-	if (gameState.first_round == '1') {
-		activateDelay(15);
+	const dateInTime = getLastChangeDate();
+	if (serverState.first_round == '1') {
+		activateDelay(dateInTime, 15);
 	}
 });
+
+function getLastChangeDate() {
+	const jsDate = new Date(Date.parse(serverState.last_change.replace(/[-]/g, '/')));
+	const dateInTime = jsDate.getTime();
+	return dateInTime;
+}
 
 setInterval(() => {
 	stateUpdate();

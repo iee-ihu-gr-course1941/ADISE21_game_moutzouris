@@ -37,7 +37,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                <div class="user-cards-row" id="my-cards">
 
                </div>
-               <button onclick="check()">Saka saka</button>
           </main>
           <div id='countdown'>
                <h2>Το παιχνίδι συνεχίζει σε</h2>

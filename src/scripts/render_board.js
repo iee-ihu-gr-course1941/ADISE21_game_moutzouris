@@ -1,6 +1,6 @@
 function updateMyCards(my_turn, cards) {
 	document.getElementById('my-cards').innerHTML = '';
-	cards.forEach((card) => {
+	cards?.forEach((card) => {
 		const newCard = createCardContainer(my_turn, card);
 		newCard.addEventListener('click', selectCard.bind(null, newCard));
 		document.getElementById('my-cards').appendChild(newCard);
@@ -87,7 +87,7 @@ function getNextPlayerTurn() {
 async function swapCard(fromPlayer, toPlayer, cardId) {
 	const { player_turn, my_turn } = serverState;
 	//Check if it is my turn
-	if (player_turn == my_turn) {
+	if (player_turn == my_turn && !clientState.roundEnabled) {
 		const nextPlayerTurn = getNextPlayerTurn();
 		//Check if swapped card comes from the next player
 		if (fromPlayer == nextPlayerTurn && toPlayer == my_turn) {
@@ -145,10 +145,4 @@ function selectCard(card) {
 		document.getElementById(id).classList.add('selected-card');
 	}
 	checkSameCards();
-}
-
-function check() {
-	fetch(`${url}/api/game_functions.php/board/check-game-ended`)
-		.then((res) => res.json())
-		.catch((err) => console.log(err));
 }
