@@ -43,8 +43,9 @@ switch ($r = array_shift($request)) {
                     echo json_encode(array('status' => '404'));
                 }
                 break;
-            case 'game-ended':
+            case 'check-game-ended':
                 checkGameEnded();
+                echo json_encode(array('saka' => 'false'));
                 break;
             default:
                 header("HTTP/1.1 404 Not Found");
@@ -77,7 +78,7 @@ function swap_card($from_player, $to_player, $card_id)
 function end_turn($next_player)
 {
     global $conn;
-    $sql = "UPDATE game_status set player_turn='$next_player', last_change=NOW()";
+    $sql = "UPDATE game_status set player_turn='$next_player', first_round=0, last_change=NOW()";
     $result = mysqli_query($conn, $sql);
     return $result;
 }
@@ -110,14 +111,73 @@ function updateLastChange()
     return $result;
 }
 
+function checkIfPlayerFinished($player_turn)
+{
+    global $conn;
+    $sql = "SELECT * from current_cards WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
+    $data = $result->fetch_array();
+    if (count($data) == 2) {
+        $winnerExists = checkIfWinnerExists();
+        if (!$winnerExists) {
+            $sql = "UPDATE game_status SET winner='$player_turn', last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
+            mysqli_query($conn, $sql);
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function checkIfWinnerExists()
+{
+    global $conn;
+    $sql = "SELECT winner FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
+    $winner = $result->fetch_assoc()['winner'];
+    if ($winner != '0') {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function checkGameEnded()
 {
     global $conn;
     $sql = "SELECT player_turn, card_name FROM current_cards WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_all();
-    while ($row = $data) {
-        $sda = 1;
+    $cards_by_user = array();
+    while ($row = $result->fetch_assoc()) {
+        $cards_by_user[$row['player_turn']][] = $row['card_name'];
     }
+    //Split cards by user
+    foreach ($cards_by_user as $player_turn => $cards) {
+        //If one user has one king then he lost
+        if (count($cards) == 1 && $cards[0] == 'king') {
+            $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
+            $result = mysqli_query($conn, $sql);
+        } else if (count($cards) == 0) {
+            //Check if there is a winner
+            $sql = "SELECT * FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
+            $result = mysqli_query($conn, $sql)['winner'];
+            //If there is no winner, assing one
+            if ($result == '0') {
+                $sql = "UPDATE game_status SET winner='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
+                $result = mysqli_query($conn, $sql);
+            } else {
+            }
+        }
+    }
+    //Update last change in game_status
+    updateLastChange();
+}
+
+function endGame()
+{
+    global $conn;
+
+    $sql = "UPDATE game_status SET status='ended' WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
     return $result;
 }

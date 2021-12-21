@@ -73,7 +73,7 @@ function checkGameInstance($session_id)
 
     //If there is no instance, create a new one
     if (empty($data)) {
-        $sql = "INSERT INTO game_status VALUES (default, default, 1, 1, 0, NOW(), '$session_id')";
+        $sql = "INSERT INTO game_status VALUES (default,'$session_id', default, 1, 1, '0', '0', default ,NOW())";
         $result = mysqli_query($conn, $sql);
     }
 }

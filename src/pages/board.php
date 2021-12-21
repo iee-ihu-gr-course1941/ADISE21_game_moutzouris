@@ -37,22 +37,32 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                <div class="user-cards-row" id="my-cards">
 
                </div>
-               <!-- <button onclick="check()">Saka saka</button> -->
+               <button onclick="check()">Saka saka</button>
           </main>
+          <div id='countdown'>
+               <h2>Το παιχνίδι συνεχίζει σε</h2>
+               <h1 id='countdown-seconds'>5 δευτερόλεπτα</h1>
+          </div>
 
      </body>
      <script>
-          let gameState = {
+          let serverState = {
                player_turn: undefined,
                my_turn: undefined,
                user_id: undefined,
                number_of_players: undefined,
+               winner: undefined,
+               loser: undefined,
                last_change: undefined,
                status: undefined,
+               remainingPlayers: []
           };
 
 
-          let selectedCards = [];
+          let clientState = {
+               selectedCards: [],
+               roundEnabled: false
+          };
      </script>
 
      <script src="../scripts/render_board.js"> </script>

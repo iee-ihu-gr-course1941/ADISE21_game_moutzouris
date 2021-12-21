@@ -6,24 +6,25 @@ if (window.location.hostname == 'users.iee.ihu.gr') {
 }
 
 function checkStateChanged(new_game_state) {
-	const stateChanged = new_game_state.last_change != gameState.last_change;
+	const stateChanged = new_game_state.last_change != serverState.last_change;
 	if (stateChanged) {
-		gameState = { ...new_game_state };
+		serverState = { ...new_game_state };
 		updateCurrentPlayer();
+		activateDelay(6);
 	}
 	return stateChanged;
 }
 
 function updateCurrentPlayer() {
-	if (gameState.my_turn == gameState.player_turn) {
+	if (serverState.my_turn == serverState.player_turn) {
 		document.getElementById('current-turn').innerHTML = 'Εγώ';
 		document.getElementById('current-turn').classList.add('my-turn');
 	} else {
-		document.getElementById('current-turn').innerHTML = gameState.player_turn;
+		document.getElementById('current-turn').innerHTML = serverState.player_turn;
 		document.getElementById('current-turn').classList.remove('my-turn');
 	}
-	document.getElementById(`name-header-${parseInt(gameState.player_turn) - 1 || parseInt(gameState.number_of_players)}`)?.classList.remove('current-player');
-	document.getElementById(`name-header-${parseInt(gameState.player_turn)}`)?.classList.add('current-player');
+	document.getElementById(`name-header-${parseInt(serverState.player_turn) - 1 || parseInt(serverState.number_of_players)}`)?.classList.remove('current-player');
+	document.getElementById(`name-header-${parseInt(serverState.player_turn)}`)?.classList.add('current-player');
 }
 
 function gameLoop(state) {
@@ -46,18 +47,35 @@ function gameLoop(state) {
 				finished = true;
 				break;
 			}
-			if (nextPlayer <= gameState.number_of_players && nextPlayer != gameState.my_turn) {
+			if (nextPlayer <= serverState.number_of_players && nextPlayer != serverState.my_turn) {
 				updateOponentCards(nextPlayer, state?.player_cards[nextPlayer]);
 				nextPlayer++;
-			} else if (nextPlayer > gameState.number_of_players) {
+			} else if (nextPlayer > serverState.number_of_players) {
 				nextPlayer = 1;
 			}
 		}
 	}
 }
 
+function activateDelay(seconds) {
+	if (!clientState.roundEnabled) {
+		clientState.roundEnabled = true;
+		document.getElementById('countdown').style.display = 'flex';
+		document.getElementById('countdown-seconds').innerText = `${seconds} δευτερόλεπτα`;
+		const tick = setInterval(() => {
+			document.getElementById('countdown-seconds').innerText = `${seconds} δευτερόλεπτα`;
+			seconds--;
+		}, 1000);
+		setTimeout(() => {
+			clientState.roundEnabled = false;
+			clearInterval(tick);
+			document.getElementById('countdown').style.display = 'none';
+		}, seconds * 1000 + 1000);
+	}
+}
+
 function stateUpdate() {
-	fetch(`${url}/api/game_loop.php`)
+	return fetch(`${url}/api/game_loop.php`)
 		.then((res) => res.json())
 		.then((state) => {
 			gameLoop(state);
@@ -66,7 +84,11 @@ function stateUpdate() {
 			console.log(err);
 		});
 }
-stateUpdate();
+stateUpdate().then(() => {
+	if (gameState.first_round == '1') {
+		activateDelay(15);
+	}
+});
 
 setInterval(() => {
 	stateUpdate();

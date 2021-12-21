@@ -38,9 +38,9 @@ function updateOponentCards(player_turn, player_cards) {
 		oponentCards.append(newCard);
 	}
 
-	if (gameState.number_of_players == 2) {
+	if (serverState.number_of_players == 2) {
 		oponentContainer.classList.add('players-2');
-	} else if (gameState.number_of_players == 3) {
+	} else if (serverState.number_of_players == 3) {
 		oponentContainer.classList.add('players-3');
 	} else {
 		oponentContainer.classList.add('players-4');
@@ -57,7 +57,7 @@ function createCardContainer(player_turn, card) {
 
 	const newCard = document.createElement('img');
 	newCard.classList.add('card-image');
-	if (player_turn == gameState.my_turn) {
+	if (player_turn == serverState.my_turn) {
 		newCard.src = card.url;
 	} else {
 		newCard.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Card_back_01.svg/703px-Card_back_01.svg.png';
@@ -65,7 +65,7 @@ function createCardContainer(player_turn, card) {
 
 	const nextPlayerTurn = getNextPlayerTurn();
 	if (player_turn == nextPlayerTurn) {
-		cardContainer.addEventListener('click', swapCard.bind(this, player_turn, gameState.my_turn, card.card_id));
+		cardContainer.addEventListener('click', swapCard.bind(this, player_turn, serverState.my_turn, card.card_id));
 	}
 
 	cardContainer.appendChild(newCard);
@@ -74,7 +74,7 @@ function createCardContainer(player_turn, card) {
 }
 
 function getNextPlayerTurn() {
-	const { my_turn, number_of_players } = gameState;
+	const { my_turn, number_of_players } = serverState;
 	let nextPlayerTurn;
 	if (my_turn == number_of_players) {
 		nextPlayerTurn = 1;
@@ -85,7 +85,7 @@ function getNextPlayerTurn() {
 }
 
 async function swapCard(fromPlayer, toPlayer, cardId) {
-	const { player_turn, my_turn } = gameState;
+	const { player_turn, my_turn } = serverState;
 	//Check if it is my turn
 	if (player_turn == my_turn) {
 		const nextPlayerTurn = getNextPlayerTurn();
@@ -107,43 +107,48 @@ async function swapCard(fromPlayer, toPlayer, cardId) {
 }
 
 async function checkSameCards() {
-	if (selectedCards.length == 2) {
-		const cardName1 = Object.values(selectedCards[0])[0];
-		const cardName2 = Object.values(selectedCards[1])[0];
-		const cardId1 = Object.keys(selectedCards[0])[0];
-		const cardId2 = Object.keys(selectedCards[1])[0];
+	if (clientState.selectedCards.length == 2) {
+		const cardName1 = clientState.selectedCards[0].cardName;
+		const cardName2 = clientState.selectedCards[1].cardName;
+		const cardId1 = clientState.selectedCards[0].cardId;
+		const cardId2 = clientState.selectedCards[1].cardId;
 		if (cardId1 == cardId2) {
 			document.getElementById(cardId1).classList.remove('selected-card');
-			selectedCards = [];
+			clientState.selectedCards = [];
 			return;
 		}
 		if (cardName1 == cardName2) {
-			const response = await fetch(`${url}/api/game_functions.php/board/discard-cards/${gameState.my_turn}/${cardId1}/${cardId2}`).then((res) => res.json());
-			if (response.status == 404) {
-				alert('Κάτι πήγε στραβά!');
-			} else {
-				selectedCards = [];
+			if (clientState.roundEnabled) {
+				const response = await fetch(`${url}/api/game_functions.php/board/discard-cards/${serverState.my_turn}/${cardId1}/${cardId2}`).then((res) => res.json());
+				if (response.status == 404) {
+					alert('Κάτι πήγε στραβά!');
+				}
 			}
-		} else {
-			setTimeout(() => {
-				document.getElementById(cardId1).classList.remove('selected-card');
-				document.getElementById(cardId2).classList.remove('selected-card');
-				selectedCards = [];
-			}, 1500);
+			clientState.selectedCards = [];
 		}
+		setTimeout(() => {
+			document.getElementById(cardId1).classList.remove('selected-card');
+			document.getElementById(cardId2).classList.remove('selected-card');
+			clientState.selectedCards = [];
+		}, 1500);
 	}
 }
 
 function selectCard(card) {
 	const id = card.getAttribute('id');
 	const cardName = card.getAttribute('card-name');
-	if (selectedCards.length < 2) {
-		selectedCards.push({ [id]: cardName });
+	if (clientState.selectedCards.length < 2) {
+		clientState.selectedCards.push({
+			cardId: id,
+			cardName,
+		});
 		document.getElementById(id).classList.add('selected-card');
 	}
 	checkSameCards();
 }
 
 function check() {
-	fetch(`${url}/api/game_functions.php/board/game-ended`).then((res) => res.json());
+	fetch(`${url}/api/game_functions.php/board/check-game-ended`)
+		.then((res) => res.json())
+		.catch((err) => console.log(err));
 }
