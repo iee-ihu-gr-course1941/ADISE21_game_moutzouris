@@ -60,7 +60,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
 
           let clientState = {
                selectedCards: [],
-               roundEnabled: false
+               roundEnabled: false,
+               winnerShown: false,
+               winner: undefined,
+               loserShown: false,
+               loser: undefined
           };
      </script>
 

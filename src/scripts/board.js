@@ -40,6 +40,8 @@ function gameLoop(state) {
 		document.getElementById('player-turn').innerHTML = my_turn;
 		updateMyCards(my_turn, player_cards);
 
+		checkWinnerLoser();
+
 		let nextPlayer = my_turn == number_of_players ? 1 : parseInt(my_turn) + 1;
 		let finished = false;
 
@@ -55,6 +57,24 @@ function gameLoop(state) {
 				nextPlayer = 1;
 			}
 		}
+	}
+}
+
+function checkWinnerLoser() {
+	let { shownWinner, winner, shownLoser, loser } = clientState;
+	if (serverState.winner != 0) {
+		clientState.winner = serverState.winner;
+	}
+	if (serverState.loser != 0) {
+		clientState.loser = serverState.loser;
+	}
+	if (shownWinner == false && winner) {
+		alert(`Ο παίκτης ${winner} κέρδισε!!!`);
+		shownWinner = true;
+	}
+	if (shownLoser == false && loser) {
+		alert(`Ο παίκτης ${loser} έχασε!!!`);
+		shownWinner = true;
 	}
 }
 
