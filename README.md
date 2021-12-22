@@ -10,9 +10,9 @@
 # Τεχνολογίες
 
 * HTML
-* Javascript
+* JavaScript
 * CSS
-* mySQL
+* MySQL
 * PHP
 
 # Περιγραφή
@@ -22,6 +22,20 @@
 # Demo
 
 Το demo μπορείτε να το βρείτε στην σελίδα: https://users.iee.ihu.gr/~it154486/ADISE21_game_moutzouris/src/index.php 
+
+# Σχεδίαση της βάσης 
+
+Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
+
+
+CREATE TABLE users (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `username` varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    PRIMARY KEY (id)
+);
+
+
 
 
   
