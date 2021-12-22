@@ -27,7 +27,7 @@
 
 Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
 
-
+```
 CREATE TABLE users (
     `id` int NOT NULL AUTO_INCREMENT,
     `username` varchar(255) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE users (
     PRIMARY KEY (id)
 );
 
-
+```
 
 
   
