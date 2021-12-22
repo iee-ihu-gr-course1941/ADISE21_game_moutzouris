@@ -305,7 +305,7 @@ function checkIfPlayerInSession()
     }
 }
 ```
-* Η συνάρτηση ``` function addUserToSession() ``` κάνει insert στον πίνακα game_session το id του παίκτη, το id του session στο οποίο βρίσκεται πλέον και το token του. 
+* Η συνάρτηση ``` function addUserToSession() ``` 
 ```
 function addUserToSession($session_id)
 {
