@@ -192,7 +192,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 ```
 * Στην εντολή  ``` if (empty($username))``` ελέγχει αν πληκτρολογήθηκε username και αντίστοιχα password, αλλιώς βγάζει error ότι κάτι λείπει.
-* Στην συνέχεια της εντολής if, ελέγχει  με ένα sql ερώτημα ```$sql_u="SELECT * FROM users WHERE username='$username'";``` αν δεν υπάρχει το username και το password αυτό, γίνεται αυτόματα insert στον πίνακα users. 
+* Στην συνέχεια της εντολής if, ελέγχει  με ένα sql ερώτημα ```$sql_u="SELECT * FROM users WHERE username='$username'";``` αν υπάρχει το username. Αν δεν υπάρχει,γίνεται αυτόματα insert στον πίνακα users με το password που δόθηκε. 
 * Στην συνέχεια της εντολής if, ελέγχει με ένα sql ερώτημα ``` $sql = "SELECT * FROM users WHERE username='$username' AND password='$pass'"; ``` αν υπάρχει το username και password στην βάση να επιστρέψει ενα αποτέλεσμα ```$result = mysqli_query($conn, $sql);``` και στην εντολή ```if (mysqli_num_rows($result) === 1) ``` κάνει την εισόδο στο lobby.
 * Αν υπάρχει το username και το Password είναι διαφορετικό, τότε η εντολή ```$result = mysqli_query($conn, $sql);``` επιστρέφει 0 και δεν μπαίνει στην if.
 
@@ -239,6 +239,13 @@ if (empty($username)) {
 	exit();
 }
 ```
+
+# Σχεδίαση του Lobby
+
+Το lobby αποτελείτε από τα δυο αρχεία με όνομα lobby.php (ένα για interface και ένα για κώδικα) και ένα αρχείο lobby.js.
+
+
+
 
 
 
