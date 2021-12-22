@@ -42,11 +42,44 @@ CREATE TABLE users (
 ```
 ```
 INSERT INTO  `users` VALUES (default, 'panos', 'abc');
-
 INSERT INTO `users` VALUES (default, 'miltos', 'abc');
-
 ```
 
-Ο Πίνακας users περιεχέι username,password και ένα id.  φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
+Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
   
-  
+```
+CREATE TABLE game_session (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `session_id` int,
+    `username` varchar(255) NOT NULL,
+    `user_id` int NOT NULL,
+    `player_turn` enum('1', '2', '3', '4'),
+    `user_token` varchar(20) NOT NULL,
+    PRIMARY KEY (id)
+);
+```
+Ο πίνακας game_session περιέχει την κατάσταση του παίκτη. Όπως την σειρά του, το primary id του από τον πίνακα users, σε πιο session παιχνιδιού είναι και to token του. 
+
+```
+CREATE TABLE cards (
+    `id` int NOT NULL,
+    `cardname` varchar(255) NOT NULL,
+    `cardchar` varchar(255) NOT NULL,
+    `url` varchar(2000) NOT NULL,
+    PRIMARY KEY(id)
+);
+```
+```
+INSERT INTO
+    cards
+VALUES
+    (
+        1,
+        'ace',
+        'clubs',
+        'https://upload.wikimedia.org/wikipedia/commons/3/36/Playing_card_club_A.svg'
+    );
+```
+Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
+
+
