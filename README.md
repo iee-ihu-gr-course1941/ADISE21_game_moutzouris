@@ -145,3 +145,100 @@ if ($conn->connect_errno) {
         $conn->connect_errno . ") " . $conn->connect_error;
 }
 ```
+
+# Σχεδίαση της Login Σελίδας
+
+Η κύρια σελίδα αποτελείται από δυο βασικά αρχεία. Το index.php και login.php 
+
+Στo αρχείο index.php περιέχει την διεπαφή του χρήστη, ο χρήστης βάζει το username και το password.
+
+```
+<body>	
+		<form action="auth/login.php" method="post">
+			<h2>Είσοδος</h2>
+			<?php if (isset($_GET['error'])) { ?>
+				<p class="error"><?php echo $_GET['error']; ?></p>
+			<?php } ?>
+			<label>Όνομα Χρήστη</label>
+			<input type="text" name="username" placeholder="User Name"><br>
+
+			<label>Κωδικός</label>
+			<input type="password" name="password" placeholder="Password"><br>
+
+			<button type="submit">Είσοδος</button>
+		</form>
+	</body>
+```
+
+Στο αρχείο login.php περιέχει τον κώδικα για την διαδικασία του login, στην πραγματικότητα κάνει τον έλεγχο των χρηστών.
+
+* Στην εντολή ```if (isset($_POST['username']) && isset($_POST['password'])) ``` παιρνει το username και password απο τo form στο index.php.
+
+```
+include "../db/db_conn.php";
+
+if (isset($_POST['username']) && isset($_POST['password'])) {
+
+	function validate($data)
+	{
+		$data = trim($data);
+		$data = stripslashes($data);
+		$data = htmlspecialchars($data);
+		return $data;
+	}
+
+	$username = validate($_POST['username']);
+	$pass = validate($_POST['password']);
+
+```
+* Στην εντολή  ``` if (empty($username))``` ελέγχει αν πληκτρολογήθηκε username και αντίστοιχα password, αλλιώς βγάζει error ότι κάτι λείπει.
+* Στην συνεχεία της εντολής if, ελέγχει  με ένα sql ερώτημα ```$sql_u="SELECT * FROM users WHERE username='$username'";``` αν δεν υπάρχει το username και το password αυτό, γίνεται αυτόματα register.
+* 
+*
+
+```
+if (empty($username)) {
+		header("Location: ../index.php?error=Το όνομα χρήστη είναι απαραίτητο");
+		exit();
+	} else if (empty($pass)) {
+		header("Location: ../index.php?error=Ο κωδικός είναι απαραίτητος");
+		exit();
+	} else {
+		//EDW GINETAI TO REGISTER SE PERIPTOSI POY DEN YPARXEI TO USERNAME
+		$sql_u="SELECT * FROM users WHERE username='$username'";
+		$res_u=mysqli_query($conn,$sql_u) or die(mysqli_error($conn));
+		if(mysqli_num_rows($res_u) == 0){			
+			$sql = "INSERT INTO users VALUES (default,'$username','$pass')";
+			$result=mysqli_query($conn,$sql) or die (mysqli_error($conn));	
+		}
+		$sql = "SELECT * FROM users WHERE username='$username' AND password='$pass'";
+
+		$result = mysqli_query($conn, $sql);
+
+		if (mysqli_num_rows($result) === 1) {
+			$row = mysqli_fetch_assoc($result);
+			if ($row['username'] === $username && $row['password'] === $pass) {
+				$_SESSION['username'] = $row['username'];
+				$token = generateRandomString(20);
+				$_SESSION['user_token'] = $token;
+				$_SESSION['user_id'] = $row['id'];
+				unset($_SESSION['game_session']);
+				header("Location: ../pages/lobby.php");
+				exit();
+			} else {
+				header("Location: ../index.php?error=Λάθος όνομα χρήστη ή κωδικός");
+				exit();
+			}
+		} else {
+			header("Location: ../index.php?error=Λάθος όνομα χρήστη ή κωδικός");
+			exit();
+		}
+	}
+} else {
+	header("Location: ../index.php");
+	exit();
+}
+```
+
+
+
