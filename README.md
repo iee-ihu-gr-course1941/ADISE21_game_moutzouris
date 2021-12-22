@@ -192,9 +192,9 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 ```
 * Στην εντολή  ``` if (empty($username))``` ελέγχει αν πληκτρολογήθηκε username και αντίστοιχα password, αλλιώς βγάζει error ότι κάτι λείπει.
-* Στην συνεχεία της εντολής if, ελέγχει  με ένα sql ερώτημα ```$sql_u="SELECT * FROM users WHERE username='$username'";``` αν δεν υπάρχει το username και το password αυτό, γίνεται αυτόματα register.
-* 
-*
+* Στην συνέχεια της εντολής if, ελέγχει  με ένα sql ερώτημα ```$sql_u="SELECT * FROM users WHERE username='$username'";``` αν δεν υπάρχει το username και το password αυτό, γίνεται αυτόματα insert στον πίνακα users. 
+* Στην συνέχεια της εντολής if, ελέγχει με ένα sql ερώτημα ``` $sql = "SELECT * FROM users WHERE username='$username' AND password='$pass'"; ``` αν υπάρχει το username και password στην βάση να επιστρέψει ενα αποτέλεσμα ```$result = mysqli_query($conn, $sql);``` και στην εντολή ```if (mysqli_num_rows($result) === 1) ``` κάνει την εισόδο στο lobby.
+* Αν υπάρχει το username και το Password είναι διαφορετικό, τότε η εντολή ```$result = mysqli_query($conn, $sql);``` επιστρέφει 0 και δεν μπαίνει στην if.
 
 ```
 if (empty($username)) {
@@ -214,7 +214,7 @@ if (empty($username)) {
 		$sql = "SELECT * FROM users WHERE username='$username' AND password='$pass'";
 
 		$result = mysqli_query($conn, $sql);
-
+		//EDW GINETAI H EISODOS STO LOBBY AN YPARXEI TO USERNAME KAI TO PASSWORD 
 		if (mysqli_num_rows($result) === 1) {
 			$row = mysqli_fetch_assoc($result);
 			if ($row['username'] === $username && $row['password'] === $pass) {
