@@ -25,7 +25,11 @@
 
 # Σχεδίαση της βάσης 
 
-Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
+ Στο αρχειο schema.sql, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες:  
+
+```
+CREATE DATABASE moutzouris;
+```
 
 ```
 CREATE TABLE users (
@@ -36,7 +40,13 @@ CREATE TABLE users (
 );
 
 ```
+```
+INSERT INTO  `users` VALUES (default, 'panos', 'abc');
 
+INSERT INTO `users` VALUES (default, 'miltos', 'abc');
 
+```
+
+Ο Πίνακας users περιεχέι username,password και ένα id.  φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
   
   
