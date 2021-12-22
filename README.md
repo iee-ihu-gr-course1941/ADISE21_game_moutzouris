@@ -244,7 +244,78 @@ if (empty($username)) {
 
 Το lobby αποτελείτε από τα δυο αρχεία με όνομα lobby.php (ένα για interface και ένα για κώδικα) και ένα αρχείο lobby.js.
 
+Mε την συνάρτηση  getAvailableSession() φτιάχνει ένα session αν δεν υπάρχει ήδη. Όταν υπάρχει session βάζει μέχρι 4 παίκτες και αν έχει γεμίσει, τότε φτιάχνει ένα καινούργιο session.
 
+* Με το ερώτημα ```$sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";``` επιστρέφει σε μια μεταβλητή των αριθμό των παικτών από τον πινάκα game_session οι οποίοι δεν βρίσκονται σε session.
+```
+function getAvailableSession()
+{
+    global $conn;
+    //Get all sessions with under 4 players
+    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";
+    $result = mysqli_query($conn, $sql);
+    while ($row = $result->fetch_assoc()) {
+        if ($row['number_of_players'] < 4) {
+            //Return the available session
+            return $row['session_id'];
+        }
+    }
+```
+* Αν το session έχει γεμίσει και είναι πάνω από 4 παίκτες τότε με το ερώτημα ```$sql = "SELECT max(id) as last_session_id FROM game_status";``` φτιάχνει ένα νέο session με id του προηγούμενου session +1. ``` $current_session = $data['last_session_id'] + 1; ```
+* Οι παίκτες μπαίνουν σε νέο session με την συνάρτηση ``` function addUserToSession($session_id) ```
+
+```
+$sql = "SELECT max(id) as last_session_id FROM game_status";
+    $result = mysqli_query($conn, $sql);
+    $data = $result->fetch_assoc();
+    $current_session = $data['last_session_id'] + 1;
+
+    //Add player to game_session table
+    if (isset($_SESSION['user_id'])) {
+        addUserToSession($current_session);
+    }
+```
+
+* Η Συνάρτηση ``` checkIfPlayerInSession() ``` ελέγχει αν ο χρήστης έχει session αλλιώς καλεί την ``` function addUserToSession() ``` 
+* Με το ερώτημα ```  $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";``` ελέγχει το id του user αν βρίσκεται σε κάποιον πινάκα του game_session  όπου το πεδίο status του πίνακα game_status δεν βρίσκεται σε κατάσταση aborted ή ended. 
+
+
+```
+function checkIfPlayerInSession()
+{
+    global $conn;
+    if (isset($_SESSION['user_id'])) {
+
+        //Check if player is already in a session
+        $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
+        $result = mysqli_query($conn, $sql);
+        $data = $result->fetch_assoc();
+```
+* Αν δεν έχει session τότε καλεί την  ``` getAvailableSession(); ``` για να βρει διαθέσιμο session, επιστρέφει ένα διαθέσιμο session_id με λιγότερα από τέσσερις παίκτες.
+* Καλεί την ``` function addUserToSession() ``` για να τον προσθέσει. 
+```
+        } else {
+
+            //If is not in a session, add into one
+            $available_session = getAvailableSession();
+            if (isset($available_session)) {
+                addUserToSession($available_session);
+            }
+        }
+    }
+}
+```
+* Η συνάρτηση ``` function addUserToSession() ``` κάνει insert στον πίνακα game_session το id του παίκτη, το id του session στο οποίο βρίσκεται πλέον και το token του. 
+```
+function addUserToSession($session_id)
+{
+    global $conn;
+    $sql = "INSERT INTO game_session values (default, $session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
+    mysqli_query($conn, $sql);
+    $_SESSION['session_id'] = $session_id;
+    checkGameInstance($session_id);
+}
+```
 
 
 
