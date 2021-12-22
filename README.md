@@ -320,24 +320,23 @@ function addUserToSession($session_id)
 *  Ελέγχει το session ενός παιχνιδιού έχει ξεκινήσει με το ερώτημα ``` $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')"; ```
 * Αν το session δεν έχει κάποια κατάσταση, τότε φτιάχνει μια κατάσταση  με το ερώτημα ```$sql = "INSERT INTO game_status VALUES (default, default, 1, 1, 0, NOW(), '$session_id')"; ```
 
-```
-CREATE TABLE game_status (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `status` enum(
-        'initialized',
-        'started',
-        'ended',
-        'aborted'
-    ) NOT NULL DEFAULT 'initialized',
-    `player_turn` int NOT NULL DEFAULT 1,
-    `number_of_players` int NOT NULL,
-    `winner` int DEFAULT NULL,
-    `last_change` timestamp DEFAULT NOW(),
-    `session_id` int not null,
-    PRIMARY KEY (id)
-); 
-```
+``` 
+function checkGameInstance($session_id)
+{
+    global $conn;
+    //Check if instance of game is already initialized or initialize one
+    $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
+    $result = mysqli_query($conn, $sql);
+    $data = $result->fetch_assoc();
 
-
+    //If there is no instance, create a new one
+    if (empty($data)) {
+        $sql = "INSERT INTO game_status VALUES (default, default, 1, 1, 0, NOW(), '$session_id')";
+        $result = mysqli_query($conn, $sql);
+    }
+}
+```
+ 
+# Σχεδίαση του παιχνιδιού
 
 
