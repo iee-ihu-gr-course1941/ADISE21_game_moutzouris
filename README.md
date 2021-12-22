@@ -45,7 +45,6 @@ INSERT INTO `users` VALUES (default, 'panos', 'abc');
 INSERT INTO `users` VALUES (default, 'miltos', 'abc');
 INSERT INTO `users` VALUES (default, 'stavros', 'abc');
 ```
-
 Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
   
 ```
@@ -83,4 +82,66 @@ VALUES
 ```
 Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
 
+```
+CREATE TABLE game_status (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `status` enum(
+        'initialized',
+        'started',
+        'ended',
+        'aborted'
+    ) NOT NULL DEFAULT 'initialized',
+    `player_turn` int NOT NULL DEFAULT 1,
+    `number_of_players` int NOT NULL,
+    `winner` int DEFAULT NULL,
+    `last_change` timestamp DEFAULT NOW(),
+    `session_id` int not null,
+    PRIMARY KEY (id)
+);
+```
+Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού δηλαδή κατάσταση των παικτών, σειρά παικτών,αριθμό παικτών, τους νικητές και το session που βρίσκονται οι παίκτες. 
 
+```
+CREATE TABLE current_cards (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `card_id` int NOT NULL,
+    `card_name` varchar(255) NOT NULL,
+    `player_id` int NOT NULL,
+    `player_turn` enum('1', '2', '3', '4'),
+    `session_id` int NOT NULL,
+    PRIMARY KEY(id)
+);
+```
+Ο πίνακας current_cards περιέχει το primary id των καρτών από τον πίνακα cards, όνομα καρτών, το primary id των χρηστών, την σειρά και το session id από τον πίνακα game_session το primary id του. 
+
+Στο αρχείο db_upass.php, βρίσκεται το username της βάσης και ο κωδικός.
+
+```
+<?php
+	$DB_PASS = 'sakasaka';
+	$DB_USER = 'root';
+?>
+```
+
+Στο αρχείο db_conn.php, κάνει την σύνδεση της απομακρυσμένης βάσης με τα παραπάνω στοιχειά. Σε περίπτωση που τα στοιχειά δεν αντιστοιχούνται κανονικά θα εμφανίσει ένα error. 
+
+```
+<?php
+$host = 'localhost';
+$db = 'moutzouris';
+require_once "db_upass.php";
+
+$user = $DB_USER;
+$pass = $DB_PASS;
+
+if (gethostname() == 'users.iee.ihu.gr') {
+    $conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');
+} else {
+    $conn = new mysqli($host, $user, '', $db);
+}
+
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: (" .
+        $conn->connect_errno . ") " . $conn->connect_error;
+}
+```
