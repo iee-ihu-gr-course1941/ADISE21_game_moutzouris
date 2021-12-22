@@ -41,8 +41,9 @@ CREATE TABLE users (
 
 ```
 ```
-INSERT INTO  `users` VALUES (default, 'panos', 'abc');
+INSERT INTO `users` VALUES (default, 'panos', 'abc');
 INSERT INTO `users` VALUES (default, 'miltos', 'abc');
+INSERT INTO `users` VALUES (default, 'stavros', 'abc');
 ```
 
 Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
