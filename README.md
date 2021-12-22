@@ -25,8 +25,9 @@
 
 # Σχεδίαση της βάσης 
 
- Στο αρχειο schema.sql, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες:  
+Στο αρχειο schema.sql, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
 
+Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.
 ```
 CREATE DATABASE moutzouris;
 ```
@@ -45,8 +46,8 @@ INSERT INTO `users` VALUES (default, 'panos', 'abc');
 INSERT INTO `users` VALUES (default, 'miltos', 'abc');
 INSERT INTO `users` VALUES (default, 'stavros', 'abc');
 ```
-Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.  
-  
+
+Ο πίνακας game_session περιέχει την κατάσταση του παίκτη. Όπως την σειρά του, το primary id του από τον πίνακα users, σε πιο session παιχνιδιού είναι και to token του.   
 ```
 CREATE TABLE game_session (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -58,8 +59,8 @@ CREATE TABLE game_session (
     PRIMARY KEY (id)
 );
 ```
-Ο πίνακας game_session περιέχει την κατάσταση του παίκτη. Όπως την σειρά του, το primary id του από τον πίνακα users, σε πιο session παιχνιδιού είναι και to token του. 
 
+Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
 ```
 CREATE TABLE cards (
     `id` int NOT NULL,
@@ -80,8 +81,8 @@ VALUES
         'https://upload.wikimedia.org/wikipedia/commons/3/36/Playing_card_club_A.svg'
     );
 ```
-Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
 
+Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού δηλαδή κατάσταση των παικτών, σειρά παικτών,αριθμό παικτών, τους νικητές και το session που βρίσκονται οι παίκτες. 
 ```
 CREATE TABLE game_status (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -99,8 +100,8 @@ CREATE TABLE game_status (
     PRIMARY KEY (id)
 );
 ```
-Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού δηλαδή κατάσταση των παικτών, σειρά παικτών,αριθμό παικτών, τους νικητές και το session που βρίσκονται οι παίκτες. 
 
+Ο πίνακας current_cards περιέχει το primary id των καρτών από τον πίνακα cards, όνομα καρτών, το primary id των χρηστών, την σειρά και το session id από τον πίνακα game_session το primary id του. 
 ```
 CREATE TABLE current_cards (
     `id` int NOT NULL AUTO_INCREMENT,
@@ -112,10 +113,8 @@ CREATE TABLE current_cards (
     PRIMARY KEY(id)
 );
 ```
-Ο πίνακας current_cards περιέχει το primary id των καρτών από τον πίνακα cards, όνομα καρτών, το primary id των χρηστών, την σειρά και το session id από τον πίνακα game_session το primary id του. 
 
 Στο αρχείο db_upass.php, βρίσκεται το username της βάσης και ο κωδικός.
-
 ```
 <?php
 	$DB_PASS = 'sakasaka';
@@ -124,7 +123,6 @@ CREATE TABLE current_cards (
 ```
 
 Στο αρχείο db_conn.php, κάνει την σύνδεση της απομακρυσμένης βάσης με τα παραπάνω στοιχειά. Σε περίπτωση που τα στοιχειά δεν αντιστοιχούνται κανονικά θα εμφανίσει ένα error. 
-
 ```
 <?php
 $host = 'localhost';
