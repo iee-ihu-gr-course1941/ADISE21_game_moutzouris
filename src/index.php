@@ -14,6 +14,7 @@ if (isset($_SESSION['user_id'])) {
 		<title>Είσοδος</title>
 		<link rel="stylesheet" type="text/css" href="styles/main.css">
 		<link rel="stylesheet" type="text/css" href="styles/index_style.css">
+		<link rel="icon" type="image/x-icon" href="../assets/king.png">
 	</head>
 
 	<body>

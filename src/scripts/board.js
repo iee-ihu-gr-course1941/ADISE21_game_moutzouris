@@ -102,18 +102,38 @@ function gameLoop(state) {
 	}
 
 	const { my_turn, remainingPlayers } = state.game_state;
-	const player_cards = state?.player_cards[my_turn];
 	if (checkStateChanged(state)) {
 		checkWinnerLoser();
 		checkGameEnded();
 
 		document.getElementById('player-turn').innerHTML = my_turn;
-		updateMyCards(my_turn, player_cards);
+		const myTurnIndex = remainingPlayers.findIndex((turn) => turn == my_turn);
+		if (myTurnIndex >= 0) {
+			const player_cards = state?.player_cards[my_turn];
+			updateMyCards(my_turn, player_cards);
+		}
 
 		//Update all remaining players cards
-		for (let turn of remainingPlayers) {
-			if (turn != my_turn) {
-				updateOponentCards(turn, state?.player_cards[turn]);
+		if (myTurnIndex >= 0) {
+			let nextPlayerIndex = myTurnIndex == remainingPlayers.length - 1 ? 0 : myTurnIndex + 1;
+			let finished = false;
+
+			while (!finished) {
+				if (nextPlayerIndex == myTurnIndex) {
+					finished = true;
+					break;
+				}
+				if (nextPlayerIndex <= remainingPlayers.length - 1 && nextPlayerIndex != myTurnIndex) {
+					const nextPlayerTurn = remainingPlayers[nextPlayerIndex];
+					updateOponentCards(nextPlayerTurn, state?.player_cards[nextPlayerTurn]);
+					nextPlayerIndex++;
+				} else if (nextPlayerIndex >= remainingPlayers.length) {
+					nextPlayerIndex = 0;
+				}
+			}
+		} else {
+			for (let turn in remainingPlayers) {
+				updateCurrentPlayer(turn, state?.player_cards[turn]);
 			}
 		}
 	}

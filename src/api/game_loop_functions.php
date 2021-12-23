@@ -4,7 +4,7 @@ include('../db/db_conn.php');
 function getShuffledCards()
 {
     global $conn;
-    $sql = "SELECT card_id, card_name, player_id, player_turn, url FROM current_cards INNER JOIN cards ON cards.id=current_cards.card_id WHERE session_id='{$_SESSION['session_id']}'";
+    $sql = "SELECT card_id, card_name, player_id, player_turn, url FROM current_cards INNER JOIN cards ON cards.id=current_cards.card_id WHERE session_id='{$_SESSION['session_id']}' ORDER BY card_name";
     $result = mysqli_query($conn, $sql);
     $cards = array();
     while ($card = $result->fetch_assoc()) {
