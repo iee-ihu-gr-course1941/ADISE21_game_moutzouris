@@ -57,8 +57,6 @@ function updateCurrentPlayer() {
 		document.getElementById('current-turn').classList.remove('my-turn');
 	}
 
-	console.log(previousPlayerIndex, currentPlayerIndex);
-
 	document.getElementById(`name-header-${previousPlayerTurn}`)?.classList.remove('current-player');
 	document.getElementById(`name-header-${currentPlayerTurn}`)?.classList.add('current-player');
 	document.getElementById(`username-header-${previousPlayerTurn}`)?.classList.remove('current-player');
@@ -67,6 +65,8 @@ function updateCurrentPlayer() {
 
 function getPlayerIndex() {
 	const { remainingPlayers } = serverState;
+
+	//Fix some issues here
 
 	let currentPlayerIndex = remainingPlayers.findIndex((turn) => turn == serverState.player_turn);
 	let myTurnIndex = remainingPlayers.findIndex((turn) => turn == serverState.my_turn);
@@ -89,7 +89,7 @@ function getPlayerIndex() {
 
 function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
-	if (serverState.first_round == '1' && (!clientState.winner || clientState.winner == 0)) {
+	if (serverState.first_round == '1' && !clientState.winner && serverState.winner == 0) {
 		activateDelay(dateInTime, 18);
 	}
 	if (state.game_state.status == 'aborted') {

@@ -6,6 +6,7 @@ function swap_card($from_player, $to_player, $card_id)
     global $conn;
     $sql = "UPDATE current_cards SET player_turn='$to_player' WHERE card_id='$card_id' AND player_turn='$from_player' AND session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
+    checkIfPlayerFinished($from_player);
     return $result;
 }
 
@@ -50,8 +51,21 @@ function checkIfPlayerFinished($player_turn)
     global $conn;
     $sql = "SELECT * from current_cards WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_all();
-    if (count($data) == 2) {
+
+    $same = false;
+    if (mysqli_num_rows($result) == 2) {
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            array_push($rows, $row);
+        }
+        if ($rows[0]['card_name'] == $rows[1]['card_name']) {
+            $sql = "DELETE FROM current_cards WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
+            mysqli_query($conn, $sql);
+            $same = true;
+        }
+    }
+
+    if ((mysqli_num_rows($result) == 2 && $same) || mysqli_num_rows($result) == 0) {
         $winnerExists = checkIfWinnerExists();
         if (!$winnerExists) {
             $sql = "UPDATE game_status SET winner='$player_turn', last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
@@ -92,7 +106,7 @@ function checkGameEnded()
         //If one user has one king then he lost
         if (count($cards) == 1 && $cards[0] == 'king') {
             $winner = checkIfWinnerExists();
-            if ($winner){
+            if ($winner) {
                 $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
                 $result = mysqli_query($conn, $sql);
                 $sql = "UPDATE game_session SET loses= loses + 1 WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
