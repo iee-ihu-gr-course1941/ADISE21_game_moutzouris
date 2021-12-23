@@ -50,3 +50,29 @@ function getUsernames()
     }
     return $data;
 }
+
+function getScoreboard()
+{
+    global $conn;
+    $sql = "SELECT username, wins, loses from game_session WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
+
+    $scoreboard = array();
+
+    while ($row = $result->fetch_assoc()) {
+        array_push($scoreboard, array('username' => $row['username'], 'wins' => $row['wins'], 'loses' => $row['loses']));
+    }
+
+    return $scoreboard;
+}
+
+function getRemainingPlayers($cards_by_player)
+{
+    $remainingPlayers = array();
+
+    foreach ($cards_by_player as $player_turn => $cards) {
+        array_push($remainingPlayers, $player_turn);
+    }
+
+    return $remainingPlayers;
+}

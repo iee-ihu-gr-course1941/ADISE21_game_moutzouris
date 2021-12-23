@@ -91,11 +91,14 @@ function checkGameEnded()
     foreach ($cards_by_user as $player_turn => $cards) {
         //If one user has one king then he lost
         if (count($cards) == 1 && $cards[0] == 'king') {
-            $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
-            $result = mysqli_query($conn, $sql);
-            $sql = "UPDATE game_session SET loses= loses + 1 WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
-            mysqli_query($conn, $sql);
-            endGame();
+            $winner = checkIfWinnerExists();
+            if ($winner){
+                $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
+                $result = mysqli_query($conn, $sql);
+                $sql = "UPDATE game_session SET loses= loses + 1 WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
+                mysqli_query($conn, $sql);
+                endGame();
+            }
         }
     }
     //Update last change in game_status

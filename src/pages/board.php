@@ -26,8 +26,11 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                               <h3 id="player-turn">1</h3>
                          </div>
                     </div>
+                    <div id="scoreboard">
+
+                    </div>
                     <div class='user-session'>
-                         <h3 class="current-username">Χρήστης: <?php echo $_SESSION['username']; ?></h3>
+                         <h3 class="current-username">Παίκτης: <?php echo $_SESSION['username']; ?></h3>
                          <button onclick="location.href = '../auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
                     </div>
                </div>
@@ -50,6 +53,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                     <button onclick="location.href = '../auth/logout.php'">Λήξη παιχνιδιού</button>
                </div>
           </div>
+
+
 
      </body>
      <script>

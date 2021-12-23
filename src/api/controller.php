@@ -83,8 +83,10 @@ switch ($r = array_shift($request)) {
         $game_state = getGameState();
         $player_turn = getPlayerTurn();
         $usernames = getUsernames();
+        $scoreboard = getScoreboard();
+        $remainingPlayers = getRemainingPlayers($cards_by_user);
 
-        $response = array('game_state' => array_merge(array('my_turn' => $player_turn, 'usernames' => $usernames), $game_state), 'player_cards' => $cards_by_user);
+        $response = array('game_state' => array_merge(array('my_turn' => $player_turn, 'remainingPlayers' => $remainingPlayers), $game_state), 'player_cards' => $cards_by_user, 'usernames' => $usernames, 'scoreboard' => $scoreboard);
 
         echo json_encode($response);
 

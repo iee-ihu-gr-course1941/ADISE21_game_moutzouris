@@ -2,7 +2,7 @@ function updateMyCards(my_turn, cards) {
 	document.getElementById('my-cards').innerHTML = '';
 	cards?.forEach((card) => {
 		const newCard = createCardContainer(my_turn, card);
-		newCard.addEventListener('click', selectCard.bind(null, newCard));
+		newCard.addEventListener('click', selectCard.bind(this, newCard));
 		document.getElementById('my-cards').appendChild(newCard);
 	});
 }
@@ -19,7 +19,9 @@ function updateOponentCards(player_turn, player_cards) {
 	usernameHeader.id = `username-header-${player_turn}`;
 	usernameHeader.innerText = clientState.usernames[player_turn];
 
-	if (player_turn == 1) {
+	const { currentPlayerIndex } = getPlayerIndex();
+
+	if (player_turn == serverState.remainingPlayers[currentPlayerIndex]) {
 		nameHeader.classList.add('current-player');
 		usernameHeader.classList.add('current-player');
 	}
@@ -73,9 +75,10 @@ function createCardContainer(player_turn, card) {
 		newCard.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Card_back_01.svg/703px-Card_back_01.svg.png';
 	}
 
-	const nextPlayerTurn = getNextPlayerTurn();
+	const nextPlayerTurn = serverState.remainingPlayers[getNextPlayerTurn()];
+
 	if (player_turn == nextPlayerTurn) {
-		cardContainer.addEventListener('click', swapCard.bind(this, player_turn, serverState.my_turn, card.card_id));
+		cardContainer.addEventListener('click', swapCard.bind(this, nextPlayerTurn, serverState.my_turn, card.card_id));
 	}
 
 	cardContainer.appendChild(newCard);
@@ -84,21 +87,27 @@ function createCardContainer(player_turn, card) {
 }
 
 function getNextPlayerTurn() {
-	const { my_turn, number_of_players } = serverState;
-	let nextPlayerTurn;
-	if (my_turn == number_of_players) {
-		nextPlayerTurn = 1;
+	const { my_turn, number_of_players, remainingPlayers } = serverState;
+
+	let currentPlayerIndex = remainingPlayers.findIndex((turn) => turn == serverState.player_turn);
+	let myTurnIndex = remainingPlayers.findIndex((turn) => turn == serverState.my_turn);
+
+	let nextPlayerIndex;
+
+	if (myTurnIndex == remainingPlayers.length - 1) {
+		nextPlayerIndex = 0;
 	} else {
-		nextPlayerTurn = parseInt(my_turn) + 1;
+		nextPlayerIndex = myTurnIndex + 1;
 	}
-	return nextPlayerTurn;
+
+	return nextPlayerIndex;
 }
 
 async function swapCard(fromPlayer, toPlayer, cardId) {
 	const { player_turn, my_turn } = serverState;
 	//Check if it is my turn
 	if (player_turn == my_turn && !clientState.roundEnabled) {
-		const nextPlayerTurn = getNextPlayerTurn();
+		const nextPlayerTurn = serverState.remainingPlayers[getNextPlayerTurn()];
 		//Check if swapped card comes from the next player
 		if (fromPlayer == nextPlayerTurn && toPlayer == my_turn) {
 			const response = await fetch(`${url}/api/controller.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());
@@ -140,7 +149,7 @@ async function checkSameCards() {
 		setTimeout(() => {
 			document.getElementById(cardId1).classList.remove('selected-card');
 			document.getElementById(cardId2).classList.remove('selected-card');
-		}, 1500);
+		}, 1000);
 	}
 }
 

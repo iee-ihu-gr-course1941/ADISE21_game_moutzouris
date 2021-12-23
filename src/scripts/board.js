@@ -5,33 +5,35 @@ if (window.location.hostname == 'users.iee.ihu.gr') {
 	url = '/src';
 }
 
-function checkStateChanged(new_game_state, player_cards) {
-	const stateChanged = new_game_state.last_change != serverState.last_change;
+function checkStateChanged(state) {
+	const { game_state, player_cards, usernames, scoreboard } = state;
+
+	const stateChanged = game_state.last_change != serverState.last_change;
 	if (stateChanged) {
 		//This means it it the first time client is initialized
 		if (!clientState.clientInitialized) {
-			new_game_state.usernames.forEach((user) => {
+			usernames.forEach((user) => {
 				Object.assign(clientState.usernames, user);
 			});
 			clientState.clientInitialized = true;
+			initializeScoreBoard(scoreboard);
 		}
 
-		serverState = { ...new_game_state };
+		serverState = { ...game_state };
 		clientState = {
-			winner: new_game_state.winner,
-			loser: new_game_state.loser,
+			winner: game_state.winner,
+			loser: game_state.loser,
 			...clientState,
 		};
 
 		updateCurrentPlayer();
-		const lastChangeDate = getLastChangeDate(new_game_state.last_change);
+		const lastChangeDate = getLastChangeDate(game_state.last_change);
 		if (serverState.first_round != '1') {
 			//Check if there are a few cards left
 			let total_player_cards = 0;
 			for (let set in player_cards) {
 				total_player_cards += player_cards[set].length;
 			}
-			console.log(total_player_cards);
 			seconds = total_player_cards < 15 ? 4 : 8;
 
 			activateDelay(lastChangeDate, seconds);
@@ -41,6 +43,12 @@ function checkStateChanged(new_game_state, player_cards) {
 }
 
 function updateCurrentPlayer() {
+	const { previousPlayerIndex, currentPlayerIndex } = getPlayerIndex();
+	const { remainingPlayers } = serverState;
+
+	const currentPlayerTurn = remainingPlayers[currentPlayerIndex];
+	const previousPlayerTurn = remainingPlayers[previousPlayerIndex];
+
 	if (serverState.my_turn == serverState.player_turn) {
 		document.getElementById('current-turn').innerHTML = 'Εγώ';
 		document.getElementById('current-turn').classList.add('my-turn');
@@ -48,15 +56,40 @@ function updateCurrentPlayer() {
 		document.getElementById('current-turn').innerHTML = serverState.player_turn;
 		document.getElementById('current-turn').classList.remove('my-turn');
 	}
-	document.getElementById(`name-header-${parseInt(serverState.player_turn) - 1 || parseInt(serverState.number_of_players)}`)?.classList.remove('current-player');
-	document.getElementById(`name-header-${parseInt(serverState.player_turn)}`)?.classList.add('current-player');
-	document.getElementById(`username-header-${parseInt(serverState.player_turn) - 1 || parseInt(serverState.number_of_players)}`)?.classList.remove('current-player');
-	document.getElementById(`username-header-${parseInt(serverState.player_turn)}`)?.classList.add('current-player');
+
+	console.log(previousPlayerIndex, currentPlayerIndex);
+
+	document.getElementById(`name-header-${previousPlayerTurn}`)?.classList.remove('current-player');
+	document.getElementById(`name-header-${currentPlayerTurn}`)?.classList.add('current-player');
+	document.getElementById(`username-header-${previousPlayerTurn}`)?.classList.remove('current-player');
+	document.getElementById(`username-header-${currentPlayerTurn}`)?.classList.add('current-player');
+}
+
+function getPlayerIndex() {
+	const { remainingPlayers } = serverState;
+
+	let currentPlayerIndex = remainingPlayers.findIndex((turn) => turn == serverState.player_turn);
+	let myTurnIndex = remainingPlayers.findIndex((turn) => turn == serverState.my_turn);
+
+	let nextPlayerIndex, previousPlayerIndex;
+
+	if (currentPlayerIndex == remainingPlayers.length - 1) {
+		nextPlayerIndex = 0;
+		previousPlayerIndex = currentPlayerIndex - 1;
+	} else if (currentPlayerIndex == 0) {
+		previousPlayerIndex = remainingPlayers.length - 1;
+		nextPlayerIndex = currentPlayerIndex + 1;
+	} else {
+		previousPlayerIndex = currentPlayerIndex - 1;
+		nextPlayerIndex = currentPlayerIndex + 1;
+	}
+
+	return { nextPlayerIndex, previousPlayerIndex, myTurnIndex, currentPlayerIndex };
 }
 
 function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
-	if (serverState.first_round == '1') {
+	if (serverState.first_round == '1' && !clientState.winner) {
 		activateDelay(dateInTime, 18);
 	}
 	if (state.game_state.status == 'aborted') {
@@ -64,32 +97,23 @@ function gameLoop(state) {
 		window.location.href = '../auth/logout.php';
 	}
 
-	if (state.game_state.status == 'started') {
+	if (state.game_state.status == 'started' && clientState.loserShown) {
 		initializeClientState();
 	}
 
-	const { my_turn, number_of_players } = state.game_state;
+	const { my_turn, remainingPlayers } = state.game_state;
 	const player_cards = state?.player_cards[my_turn];
-	if (checkStateChanged(state.game_state, state.player_cards)) {
+	if (checkStateChanged(state)) {
 		checkWinnerLoser();
 		checkGameEnded();
 
 		document.getElementById('player-turn').innerHTML = my_turn;
 		updateMyCards(my_turn, player_cards);
 
-		let nextPlayer = my_turn == number_of_players ? 1 : parseInt(my_turn) + 1;
-		let finished = false;
-
-		while (!finished) {
-			if (nextPlayer == my_turn) {
-				finished = true;
-				break;
-			}
-			if (nextPlayer <= serverState.number_of_players && nextPlayer != serverState.my_turn) {
-				updateOponentCards(nextPlayer, state?.player_cards[nextPlayer]);
-				nextPlayer++;
-			} else if (nextPlayer > serverState.number_of_players) {
-				nextPlayer = 1;
+		//Update all remaining players cards
+		for (let turn of remainingPlayers) {
+			if (turn != my_turn) {
+				updateOponentCards(turn, state?.player_cards[turn]);
 			}
 		}
 	}
@@ -140,7 +164,7 @@ async function stateUpdate() {
 		.then((res) => res.json())
 		.then((state) => {
 			gameLoop(state);
-			// console.log(state);
+			console.log(state);
 		})
 		.catch((err) => {
 			console.log(err);
@@ -194,6 +218,33 @@ function initializeClientState() {
 	};
 }
 
-function initializeScoreBoard() {
-	
+function initializeScoreBoard(playerScores) {
+	const scoreboard = document.getElementById('scoreboard');
+	scoreboard.innerHTML = '';
+
+	const newRow = (username, wins, loses) => {
+		const row = document.createElement('div');
+
+		const usernameColumn = document.createElement('div');
+		usernameColumn.innerText = username;
+
+		const winsColumn = document.createElement('div');
+		winsColumn.innerText = wins;
+
+		const losesColumn = document.createElement('div');
+		losesColumn.innerText = loses;
+
+		row.appendChild(usernameColumn);
+		row.appendChild(winsColumn);
+		row.appendChild(losesColumn);
+
+		return row;
+	};
+
+	scoreboard.appendChild(newRow('Όνομα', 'Νίκες', 'Ήττες'));
+
+	playerScores.forEach((player) => {
+		const { username, wins, loses } = player;
+		scoreboard.appendChild(newRow(username, wins, loses));
+	});
 }

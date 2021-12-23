@@ -4,7 +4,7 @@
 }
 
 #oponent-cards {
-	width: 80%;
+	width: 90%;
 	max-width: 90vw;
 	height: 15rem;
 	display: flex;
@@ -12,6 +12,8 @@
 	justify-content: space-evenly;
 	align-items: center;
 	column-gap: 5rem;
+	position: relative;
+	top: 3rem;
 }
 
 #oponent-cards > div > div {
@@ -189,4 +191,34 @@
 
 .actions > button:nth-child(2) {
 	background-color: #e53e3e;
+}
+
+#scoreboard {
+	padding: 1rem 0.4rem;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: rgb(255, 255, 255);
+	background-color: #56626f;
+	border-radius: 0.4rem;
+	row-gap: 0.2rem;
+	width: fit-content;
+}
+
+#scoreboard > div {
+	display: flex;
+	direction: row;
+	justify-content: flex-start;
+	padding: 0 0.5rem;
+}
+
+#scoreboard > div > div:nth-child(1) {
+	width: 5rem;
+}
+
+#scoreboard > div > div:nth-child(2),
+#scoreboard > div > div:nth-child(3) {
+	width: 4rem;
+	text-align: center;
 }
