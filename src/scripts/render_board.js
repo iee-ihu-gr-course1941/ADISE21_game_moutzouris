@@ -11,11 +11,17 @@ function updateOponentCards(player_turn, player_cards) {
 	let oponentContainer = document.getElementById(`oponent-container-${player_turn}`);
 	let oponentCards = document.getElementById(`oponent-cards-${player_turn}`);
 
-	let nameHeader = document.createElement('h2');
+	let nameHeader = document.createElement('h3');
 	nameHeader.id = `name-header-${player_turn}`;
 	nameHeader.innerText = `Παίκτης ${player_turn}`;
+
+	let usernameHeader = document.createElement('h1');
+	usernameHeader.id = `username-header-${player_turn}`;
+	usernameHeader.innerText = clientState.usernames[player_turn];
+
 	if (player_turn == 1) {
 		nameHeader.classList.add('current-player');
+		usernameHeader.classList.add('current-player');
 	}
 
 	if (!oponentContainer) {
@@ -27,6 +33,7 @@ function updateOponentCards(player_turn, player_cards) {
 		oponentCards.classList.add(`oponent-card-container`);
 		oponentCards.id = `oponent-cards-${player_turn}`;
 
+		oponentContainer.appendChild(usernameHeader);
 		oponentContainer.appendChild(nameHeader);
 		oponentContainer.appendChild(oponentCards);
 	} else {
@@ -53,7 +60,10 @@ function createCardContainer(player_turn, card) {
 	const cardContainer = document.createElement('div');
 	cardContainer.classList.add('card-container');
 	cardContainer.setAttribute('id', card.card_id);
-	cardContainer.setAttribute('card-name', card.card_name);
+
+	if (player_turn == serverState.my_turn) {
+		cardContainer.setAttribute('card-name', card.card_name);
+	}
 
 	const newCard = document.createElement('img');
 	newCard.classList.add('card-image');
@@ -91,11 +101,11 @@ async function swapCard(fromPlayer, toPlayer, cardId) {
 		const nextPlayerTurn = getNextPlayerTurn();
 		//Check if swapped card comes from the next player
 		if (fromPlayer == nextPlayerTurn && toPlayer == my_turn) {
-			const response = await fetch(`${url}/api/game_functions.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());
+			const response = await fetch(`${url}/api/controller.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());
 
 			if (response.status == 200) {
 				//End my turn
-				const response = await fetch(`${url}/api/game_functions.php/board/end-turn/${nextPlayerTurn}`).then((res) => res.json());
+				const response = await fetch(`${url}/api/controller.php/board/end-turn/${nextPlayerTurn}`).then((res) => res.json());
 				if (response.status == 404) {
 					alert('Κάτι πήγε στραβά!');
 				} else {
@@ -119,17 +129,17 @@ async function checkSameCards() {
 		}
 		if (cardName1 == cardName2) {
 			if (clientState.roundEnabled) {
-				const response = await fetch(`${url}/api/game_functions.php/board/discard-cards/${serverState.my_turn}/${cardId1}/${cardId2}`).then((res) => res.json());
+				const response = await fetch(`${url}/api/controller.php/board/discard-cards/${serverState.my_turn}/${cardId1}/${cardId2}`).then((res) => res.json());
 				if (response.status == 404) {
 					alert('Κάτι πήγε στραβά!');
 				}
 			}
 			clientState.selectedCards = [];
 		}
+		clientState.selectedCards = [];
 		setTimeout(() => {
 			document.getElementById(cardId1).classList.remove('selected-card');
 			document.getElementById(cardId2).classList.remove('selected-card');
-			clientState.selectedCards = [];
 		}, 1500);
 	}
 }

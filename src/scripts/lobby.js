@@ -1,8 +1,8 @@
 let url;
 if (window.location.hostname == 'users.iee.ihu.gr') {
-	url = '/~it154486/ADISE21_game_moutzouris/src'
+	url = '/~it154486/ADISE21_game_moutzouris/src';
 } else {
-	url = '/src'
+	url = '/src';
 }
 
 function addPlayerToTable(uid, username) {
@@ -17,7 +17,7 @@ function addPlayerToTable(uid, username) {
 }
 
 function startGame() {
-	fetch(`${url}/api/start_game.php`)
+	fetch(`${url}/api/controller.php/start-game`)
 		.then((res) => res.json())
 		.then((data) => {
 			// console.log(data);
@@ -43,7 +43,7 @@ setInterval(async () => {
         <th>Νο. Παίκτη</th>
         <th>Username</th>
     </tr>`;
-	const data = await fetch(`${url}/api/lobby.php`).then((res) => res.json());
+	const data = await fetch(`${url}/api/controller.php/lobby`).then((res) => res.json());
 	data.players.forEach((player) => {
 		for (const [uid, username] of Object.entries(player)) {
 			addPlayerToTable(uid, username);
@@ -53,4 +53,4 @@ setInterval(async () => {
 		window.location.pathname = `${url}/pages/board.php`;
 	}
 	checkAvailablePlayers(data.players);
-}, 3000);
+}, 1000);

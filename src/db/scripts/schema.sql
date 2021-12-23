@@ -50,6 +50,8 @@ CREATE TABLE game_session (
     `user_id` int NOT NULL,
     `player_turn` enum('1', '2', '3', '4'),
     `user_token` varchar(20) NOT NULL,
+    `wins` int NOT NULL DEFAULT 0,
+    `loses` int NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 

@@ -5,13 +5,37 @@ if (window.location.hostname == 'users.iee.ihu.gr') {
 	url = '/src';
 }
 
-function checkStateChanged(new_game_state) {
+function checkStateChanged(new_game_state, player_cards) {
 	const stateChanged = new_game_state.last_change != serverState.last_change;
 	if (stateChanged) {
+		//This means it it the first time client is initialized
+		if (!clientState.clientInitialized) {
+			new_game_state.usernames.forEach((user) => {
+				Object.assign(clientState.usernames, user);
+			});
+			clientState.clientInitialized = true;
+		}
+
 		serverState = { ...new_game_state };
+		clientState = {
+			winner: new_game_state.winner,
+			loser: new_game_state.loser,
+			...clientState,
+		};
+
 		updateCurrentPlayer();
-		const lastChangeDate = getLastChangeDate();
-		activateDelay(lastChangeDate, 8);
+		const lastChangeDate = getLastChangeDate(new_game_state.last_change);
+		if (serverState.first_round != '1') {
+			//Check if there are a few cards left
+			let total_player_cards = 0;
+			for (let set in player_cards) {
+				total_player_cards += player_cards[set].length;
+			}
+			console.log(total_player_cards);
+			seconds = total_player_cards < 15 ? 4 : 8;
+
+			activateDelay(lastChangeDate, seconds);
+		}
 	}
 	return stateChanged;
 }
@@ -26,21 +50,32 @@ function updateCurrentPlayer() {
 	}
 	document.getElementById(`name-header-${parseInt(serverState.player_turn) - 1 || parseInt(serverState.number_of_players)}`)?.classList.remove('current-player');
 	document.getElementById(`name-header-${parseInt(serverState.player_turn)}`)?.classList.add('current-player');
+	document.getElementById(`username-header-${parseInt(serverState.player_turn) - 1 || parseInt(serverState.number_of_players)}`)?.classList.remove('current-player');
+	document.getElementById(`username-header-${parseInt(serverState.player_turn)}`)?.classList.add('current-player');
 }
 
 function gameLoop(state) {
+	const dateInTime = getLastChangeDate(state.game_state.last_change);
+	if (serverState.first_round == '1') {
+		activateDelay(dateInTime, 18);
+	}
 	if (state.game_state.status == 'aborted') {
 		alert('Το παιχνίδι διακόπηκε!');
 		window.location.href = '../auth/logout.php';
 	}
 
+	if (state.game_state.status == 'started') {
+		initializeClientState();
+	}
+
 	const { my_turn, number_of_players } = state.game_state;
 	const player_cards = state?.player_cards[my_turn];
-	if (checkStateChanged(state.game_state)) {
+	if (checkStateChanged(state.game_state, state.player_cards)) {
+		checkWinnerLoser();
+		checkGameEnded();
+
 		document.getElementById('player-turn').innerHTML = my_turn;
 		updateMyCards(my_turn, player_cards);
-
-		checkWinnerLoser();
 
 		let nextPlayer = my_turn == number_of_players ? 1 : parseInt(my_turn) + 1;
 		let finished = false;
@@ -61,47 +96,47 @@ function gameLoop(state) {
 }
 
 function checkWinnerLoser() {
-	let { shownWinner, winner, shownLoser, loser } = clientState;
 	if (serverState.winner != 0) {
-		clientState.winner = serverState.winner;
+		clientState.winner = clientState.usernames[serverState.winner];
 	}
 	if (serverState.loser != 0) {
-		clientState.loser = serverState.loser;
+		clientState.loser = clientState.usernames[serverState.loser];
 	}
-	if (shownWinner == false && winner) {
-		alert(`Ο παίκτης ${winner} κέρδισε!!!`);
-		shownWinner = true;
+	if (clientState.winnerShown == false && serverState.winner != 0) {
+		alert(`Ο παίκτης ${clientState.winner} κέρδισε!!!`);
+		clientState.winnerShown = true;
 	}
-	if (shownLoser == false && loser) {
-		alert(`Ο παίκτης ${loser} έχασε!!!`);
-		shownWinner = true;
+	if (clientState.loserShown == false && serverState.loser != 0) {
+		alert(`Ο παίκτης ${clientState.loser} έχασε!!!`);
+		clientState.loserShown = true;
 	}
 }
 
 function activateDelay(last_change, seconds) {
-	let secondsRemaining = Math.ceil((last_change + seconds * 1000 - Date.now()) / 1000);
-	if (secondsRemaining > 0) {
-		if (!clientState.roundEnabled) {
+	let secondsRemaining = Math.round((last_change + seconds * 1000 - Date.now()) / 1000);
+	if (secondsRemaining > 0 && !clientState.roundEnabled) {
+		document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
+		clientState.roundEnabled = true;
+		document.getElementById('countdown').style.display = 'flex';
+
+		const tickFunction = () => {
 			document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
-			clientState.roundEnabled = true;
-			document.getElementById('countdown').style.display = 'flex';
-			let finished = false;
-			const tick = setInterval(() => {
-				document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
-				secondsRemaining--;
-				if (secondsRemaining == 0) {
-					finished = true;
-					clientState.roundEnabled = false;
-					document.getElementById('countdown').style.display = 'none';
-					clearInterval(tick);
-				}
-			}, 1000);
-		}
+			secondsRemaining--;
+			if (secondsRemaining == -1) {
+				clientState.roundEnabled = false;
+				document.getElementById('countdown').style.display = 'none';
+				clearInterval(tick);
+			}
+		};
+		tickFunction();
+		const tick = setInterval(() => {
+			tickFunction();
+		}, 1000);
 	}
 }
 
-function stateUpdate() {
-	return fetch(`${url}/api/game_loop.php`)
+async function stateUpdate() {
+	return fetch(`${url}/api/controller.php/game-status`)
 		.then((res) => res.json())
 		.then((state) => {
 			gameLoop(state);
@@ -111,15 +146,11 @@ function stateUpdate() {
 			console.log(err);
 		});
 }
-stateUpdate().then(() => {
-	const dateInTime = getLastChangeDate();
-	if (serverState.first_round == '1') {
-		activateDelay(dateInTime, 15);
-	}
-});
 
-function getLastChangeDate() {
-	const jsDate = new Date(Date.parse(serverState.last_change.replace(/[-]/g, '/')));
+stateUpdate();
+
+function getLastChangeDate(last_change) {
+	const jsDate = new Date(Date.parse(last_change.replace(/[-]/g, '/')));
 	const dateInTime = jsDate.getTime();
 	return dateInTime;
 }
@@ -127,3 +158,42 @@ function getLastChangeDate() {
 setInterval(() => {
 	stateUpdate();
 }, 1000);
+
+function checkGameEnded() {
+	if (serverState.status == 'ended') {
+		console.log(serverState);
+		document.getElementById('game-end-overlay').style.display = 'flex';
+	}
+}
+
+async function continueSession() {
+	try {
+		const response = await fetch(`${url}/api/controller.php/continue-session`).then((res) => res.json());
+		if (response.status == 200) {
+			fetch(`${url}/api/controller.php/start-game`).then((res) => {
+				res = res.json();
+				initializeClientState();
+			});
+		}
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+function initializeClientState() {
+	document.getElementById('game-end-overlay').style.display = 'none';
+	clientState = {
+		selectedCards: [],
+		roundEnabled: false,
+		winnerShown: false,
+		winner: undefined,
+		loserShown: false,
+		loser: undefined,
+		usernames: {},
+		clientInitialized: false,
+	};
+}
+
+function initializeScoreBoard() {
+	
+}

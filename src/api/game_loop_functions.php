@@ -1,14 +1,5 @@
 <?php
-session_start();
 include('../db/db_conn.php');
-
-// Headers
-header('Access-Control-Allow-Origin: *');
-// header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
-
-global $conn;
 
 function getShuffledCards()
 {
@@ -47,11 +38,15 @@ function getPlayerTurn()
     return $result->fetch_assoc()['player_turn'];
 }
 
-$shuffled_cards = getShuffledCards();
-$cards_by_user = splitCardsByUser($shuffled_cards);
-$game_state = getGameState();
-$player_turn = getPlayerTurn();
+function getUsernames()
+{
+    global $conn;
+    $sql = "SELECT username, player_turn FROM game_session WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
 
-$response = array('game_state' => array_merge(array('my_turn' => $player_turn), $game_state), 'player_cards' => $cards_by_user);
-
-echo json_encode($response);
+    $data = array();
+    while ($row = $result->fetch_assoc()) {
+        array_push($data, array($row['player_turn'] => $row['username']));
+    }
+    return $data;
+}

@@ -43,6 +43,14 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                <h1 id='countdown-seconds'>5 δευτερόλεπτα</h1>
           </div>
 
+          <div id="game-end-overlay">
+               <h1>Το παιχνίδι τελείωσε</h1>
+               <div class="actions">
+                    <button onclick='continueSession()'>Έναρξη νέου παιχνιδιού</button>
+                    <button onclick="location.href = '../auth/logout.php'">Λήξη παιχνιδιού</button>
+               </div>
+          </div>
+
      </body>
      <script>
           let serverState = {
@@ -64,7 +72,9 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                winnerShown: false,
                winner: undefined,
                loserShown: false,
-               loser: undefined
+               loser: undefined,
+               usernames: {},
+               clientInitialized: false
           };
      </script>
 

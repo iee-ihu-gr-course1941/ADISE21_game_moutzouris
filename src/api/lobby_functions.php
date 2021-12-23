@@ -1,13 +1,5 @@
 <?php
-session_start();
 include('../db/db_conn.php');
-
-// Headers
-header('Access-Control-Allow-Origin: *');
-// header('Content-Type: application/json');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
-global $conn;
 
 function checkIfPlayerInSession()
 {
@@ -81,7 +73,7 @@ function checkGameInstance($session_id)
 function addUserToSession($session_id)
 {
     global $conn;
-    $sql = "INSERT INTO game_session values (default, $session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
+    $sql = "INSERT INTO game_session values (default, $session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}', 0, 0)";
     mysqli_query($conn, $sql);
     $_SESSION['session_id'] = $session_id;
     checkGameInstance($session_id);
@@ -112,13 +104,3 @@ function checkIfGameStarted()
         return 'null';
     }
 }
-
-
-checkIfPlayerInSession();
-$players = getSessionPlayers();
-$status = checkIfGameStarted();
-
-echo json_encode(array(
-    'players' => $players,
-    'game_status' => $status
-));

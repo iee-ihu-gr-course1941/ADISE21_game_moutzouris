@@ -1,172 +1,86 @@
 <?php
-session_start();
 include('../db/db_conn.php');
-global $conn;
 
-$method = $_SERVER['REQUEST_METHOD'];
-$request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
-// $input = json_decode(file_get_contents('php://input'), true);
-// if ($input == null) {
-//     $input = [];
-// }
-// if (isset($_SERVER['HTTP_X_TOKEN'])) {
-//     $input['token'] = $_SERVER['HTTP_X_TOKEN'];
-// } else {
-//     $input['token'] = '';
-// }
-
-switch ($r = array_shift($request)) {
-    case 'board':
-        switch ($b = array_shift($request)) {
-            case '':
-            case null:
-                // handle_board($method, $input);
-                break;
-            case 'swap-card':
-                if (swap_card($request[0], $request[1], $request[2])) {
-                    echo json_encode(array('status' => '200'));
-                } else {
-                    echo json_encode(array('status' => '404'));
-                }
-                break;
-            case 'end-turn':
-                if (end_turn($request[0])) {
-                    echo json_encode(array('status' => '200'));
-                } else {
-                    echo json_encode(array('status' => '404'));
-                }
-                break;
-            case 'discard-cards':
-                checkIfPlayerFinished($request[0]);
-
-                if (discard_cards($request[0], $request[1], $request[2])) {
-                    checkGameEnded();
-                    echo json_encode(array('status' => '200'));
-                } else {
-                    echo json_encode(array('status' => '404'));
-                }
-                break;
-            default:
-                header("HTTP/1.1 404 Not Found");
-                break;
-        }
-        break;
-    case 'status':
-        if (sizeof($request) == 0) {
-            // handle_status($method);
-        } else {
-            header("HTTP/1.1 404 Not Found");
-        }
-        break;
-    case 'players':
-        // handle_player($method, $request, $input);
-        break;
-    default:
-        header("HTTP/1.1 404 Not Found");
-        exit;
-}
-
-function swap_card($from_player, $to_player, $card_id)
+//Select all cards and shuffle them
+function shuffleCards()
 {
     global $conn;
-    $sql = "UPDATE current_cards SET player_turn='$to_player' WHERE card_id='$card_id' AND player_turn='$from_player' AND session_id='{$_SESSION['session_id']}'";
+    $sql = "SELECT id, cardname FROM cards WHERE cardchar != 'back'";
+
     $result = mysqli_query($conn, $sql);
-    return $result;
+
+    $cards = $result->fetch_all();
+    shuffle($cards);
+    return $cards;
 }
 
-function end_turn($next_player)
+//Select all players from game_session and count them
+function getSessionPlayersNames()
 {
     global $conn;
-    $sql = "UPDATE game_status set player_turn='$next_player', first_round=0, last_change=NOW()";
+    $sql = "SELECT COUNT(user_id) AS number_of_players FROM game_session WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
-    return $result;
+    $data = $result->fetch_assoc();
+    return $data['number_of_players'];
 }
 
-
-function discard_cards($player_turn, $card_id_1, $card_id_2)
+//Update turns of players in game_session
+function arrangeTurns()
 {
     global $conn;
-    $sql = "SELECT player_turn FROM game_session WHERE user_token='{$_SESSION['user_token']}'";
+    $sql = "SELECT user_id FROM game_session WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
-    if (isset($result)) {
-        $pt = $result->fetch_assoc()['player_turn'];
-        if ($player_turn == $pt) {
-            $sql = "DELETE FROM current_cards WHERE session_id='{$_SESSION['session_id']}' AND player_turn='$player_turn' AND card_id='$card_id_1'";
-            $result = mysqli_query($conn, $sql);
-            $sql = "DELETE FROM current_cards WHERE session_id='{$_SESSION['session_id']}' AND player_turn='$player_turn' AND card_id='$card_id_2'";
-            $result = mysqli_query($conn, $sql);
-            updateLastChange();
-            return $result;
-        }
-    }
-    return false;
-}
-
-function updateLastChange()
-{
-    global $conn;
-    $sql = "UPDATE game_status set last_change=NOW()";
-    $result = mysqli_query($conn, $sql);
-    return $result;
-}
-
-function checkIfPlayerFinished($player_turn)
-{
-    global $conn;
-    $sql = "SELECT * from current_cards WHERE player_turn='$player_turn' AND session_id='{$_SESSION['session_id']}'";
-    $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_all();
-    if (count($data) == 2) {
-        $winnerExists = checkIfWinnerExists();
-        if (!$winnerExists) {
-            $sql = "UPDATE game_status SET winner='$player_turn', last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
-            mysqli_query($conn, $sql);
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function checkIfWinnerExists()
-{
-    global $conn;
-    $sql = "SELECT winner FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
-    $result = mysqli_query($conn, $sql);
-    $winner = $result->fetch_assoc()['winner'];
-    if ($winner != '0') {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function checkGameEnded()
-{
-    global $conn;
-    $sql = "SELECT player_turn, card_name FROM current_cards WHERE session_id='{$_SESSION['session_id']}'";
-    $result = mysqli_query($conn, $sql);
-    $cards_by_user = array();
+    $player_turns = array();
+    $i = 1;
+    //Update player turns in game_session table
     while ($row = $result->fetch_assoc()) {
-        $cards_by_user[$row['player_turn']][] = $row['card_name'];
+        array_push($player_turns, array($row['user_id'] => $i));
+        $sql = "UPDATE game_session SET player_turn='$i' where user_id='{$row['user_id']}'";
+        mysqli_query($conn, $sql);
+        $i++;
     }
-    //Split cards by user
-    foreach ($cards_by_user as $player_turn => $cards) {
-        //If one user has one king then he lost
-        if (count($cards) == 1 && $cards[0] == 'king') {
-            $sql = "UPDATE game_status SET loser='$player_turn' WHERE session_id='{$_SESSION['session_id']}'";
-            $result = mysqli_query($conn, $sql);
-            endGame();
-        }
-    }
-    //Update last change in game_status
-    updateLastChange();
+    return $player_turns;
 }
 
-function endGame()
+//Deal shuffled cards to players an put them in current_cards table
+function dealCards($shuffledCards, $player_turns)
 {
     global $conn;
-    $sql = "UPDATE game_status SET status='ended' WHERE session_id='{$_SESSION['session_id']}'";
+    //Clear previous cards
+    $sql = "DELETE FROM current_cards WHERE session_id='{$_SESSION['session_id']}'";
+    mysqli_query($conn, $sql);
+    $number_of_players = count($player_turns);
+
+    $i = 1;
+    foreach ($shuffledCards as $key => $card) {
+        $user_id = array_keys($player_turns[$i - 1])[0];
+        $sql = "INSERT INTO current_cards values (default, '$card[0]', '$card[1]','$user_id', '$i','{$_SESSION['session_id']}')";
+        mysqli_query($conn, $sql);
+        if ($i >= $number_of_players) {
+            $i = 1;
+        } else {
+            $i++;
+        }
+    }
+}
+
+//Change game status
+function changeGameStatus($number_of_players)
+{
+    global $conn;
+    $sql = "UPDATE game_status SET status = 'started', number_of_players=$number_of_players,last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
+    $result = mysqli_query($conn, $sql);
+    if (!empty($result)) {
+        $_SESSION['game_status'] = 'started';
+    }
+}
+
+//Finish current game and set new one
+function prepareNextGame()
+{
+    global $conn;
+    //Reset winner,loser and first_roundin game_status
+    $sql = "UPDATE game_status SET first_round=1, winner='0', loser='0', last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result;
 }
