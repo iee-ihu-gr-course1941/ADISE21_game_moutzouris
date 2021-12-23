@@ -89,7 +89,7 @@ function getPlayerIndex() {
 
 function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
-	if (serverState.first_round == '1' && !clientState.winner) {
+	if (serverState.first_round == '1' && (!clientState.winner || clientState.winner == 0)) {
 		activateDelay(dateInTime, 18);
 	}
 	if (state.game_state.status == 'aborted') {
@@ -102,12 +102,15 @@ function gameLoop(state) {
 	}
 
 	const { my_turn, remainingPlayers } = state.game_state;
+
 	if (checkStateChanged(state)) {
 		checkWinnerLoser();
 		checkGameEnded();
 
 		document.getElementById('player-turn').innerHTML = my_turn;
+
 		const myTurnIndex = remainingPlayers.findIndex((turn) => turn == my_turn);
+
 		if (myTurnIndex >= 0) {
 			const player_cards = state?.player_cards[my_turn];
 			updateMyCards(my_turn, player_cards);
