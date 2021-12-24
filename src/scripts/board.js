@@ -89,6 +89,7 @@ function getPlayerIndex() {
 
 function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
+
 	if (serverState.first_round == '1' && !clientState.winner && serverState.winner == 0) {
 		activateDelay(dateInTime, 18);
 	}
@@ -101,9 +102,9 @@ function gameLoop(state) {
 		initializeClientState();
 	}
 
-	const { my_turn, remainingPlayers } = state.game_state;
-
+	
 	if (checkStateChanged(state)) {
+		const { my_turn, remainingPlayers } = state.game_state;
 		checkWinnerLoser();
 		checkGameEnded();
 
@@ -178,7 +179,7 @@ function activateDelay(last_change, seconds) {
 		tickFunction();
 		const tick = setInterval(() => {
 			tickFunction();
-		}, 1000);
+		}, 2000);
 	}
 }
 
@@ -204,11 +205,10 @@ function getLastChangeDate(last_change) {
 
 setInterval(() => {
 	stateUpdate();
-}, 1000);
+}, 2000);
 
 function checkGameEnded() {
 	if (serverState.status == 'ended') {
-		console.log(serverState);
 		document.getElementById('game-end-overlay').style.display = 'flex';
 	}
 }

@@ -33,7 +33,7 @@ function getAvailableSession()
 {
     global $conn;
     //Get all sessions with under 4 players
-    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";
+    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended' OR status='started') GROUP BY session_id";
     $result = mysqli_query($conn, $sql);
     while ($row = $result->fetch_assoc()) {
         if ($row['number_of_players'] < 4) {
@@ -59,7 +59,7 @@ function checkGameInstance($session_id)
 {
     global $conn;
     //Check if instance of game is already initialized or initialize one
-    $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
+    $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended' OR status='started')";
     $result = mysqli_query($conn, $sql);
     $data = $result->fetch_assoc();
 

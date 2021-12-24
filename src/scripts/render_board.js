@@ -107,7 +107,9 @@ async function swapCard(fromPlayer, toPlayer, cardId) {
 	const { player_turn, my_turn } = serverState;
 	//Check if it is my turn
 	if (player_turn == my_turn && !clientState.roundEnabled) {
-		const nextPlayerTurn = serverState.remainingPlayers[getNextPlayerTurn()];
+		const { nextPlayerIndex } = getPlayerIndex();
+
+		const nextPlayerTurn = serverState.remainingPlayers[nextPlayerIndex];
 		//Check if swapped card comes from the next player
 		if (fromPlayer == nextPlayerTurn && toPlayer == my_turn) {
 			const response = await fetch(`${url}/api/controller.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());

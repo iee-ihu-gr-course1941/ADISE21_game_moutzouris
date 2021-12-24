@@ -53,4 +53,4 @@ setInterval(async () => {
 		window.location.pathname = `${url}/pages/board.php`;
 	}
 	checkAvailablePlayers(data.players);
-}, 1000);
+}, 3000);
