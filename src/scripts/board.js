@@ -23,6 +23,7 @@ function checkStateChanged(state) {
 		clientState = {
 			winner: game_state.winner,
 			loser: game_state.loser,
+			clientInitialized: true,
 			...clientState,
 		};
 
@@ -102,11 +103,13 @@ function gameLoop(state) {
 		initializeClientState();
 	}
 
-	
+	checkAvailablePlayer();
+
 	if (checkStateChanged(state)) {
 		const { my_turn, remainingPlayers } = state.game_state;
 		checkWinnerLoser();
 		checkGameEnded();
+		checkAvailablePlayer();
 
 		document.getElementById('player-turn').innerHTML = my_turn;
 
@@ -136,6 +139,7 @@ function gameLoop(state) {
 				}
 			}
 		} else {
+			document.getElementById('my-cards').innerHTML = '';
 			for (let turn in remainingPlayers) {
 				updateCurrentPlayer(turn, state?.player_cards[turn]);
 			}
@@ -270,4 +274,15 @@ function initializeScoreBoard(playerScores) {
 		const { username, wins, loses } = player;
 		scoreboard.appendChild(newRow(username, wins, loses));
 	});
+}
+
+function checkAvailablePlayer() {
+	const { my_turn, player_turn, remainingPlayers } = serverState;
+	const { nextPlayerIndex } = getPlayerIndex();
+	const nextPlayerTurn = remainingPlayers[nextPlayerIndex];
+
+	if (my_turn == player_turn && !remainingPlayers.includes(parseInt(player_turn))) {
+		//Update turn
+		fetch(`${url}/api/controller.php/board/end-turn/${nextPlayerTurn}`).then(() => {});
+	}
 }

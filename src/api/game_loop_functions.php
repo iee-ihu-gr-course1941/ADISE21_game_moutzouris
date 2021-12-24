@@ -74,5 +74,7 @@ function getRemainingPlayers($cards_by_player)
         array_push($remainingPlayers, $player_turn);
     }
 
+    sort($remainingPlayers);
+
     return $remainingPlayers;
 }

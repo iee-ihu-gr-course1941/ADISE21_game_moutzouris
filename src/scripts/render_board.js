@@ -90,7 +90,7 @@ function getNextPlayerTurn() {
 	const { my_turn, number_of_players, remainingPlayers } = serverState;
 
 	let currentPlayerIndex = remainingPlayers.findIndex((turn) => turn == serverState.player_turn);
-	let myTurnIndex = remainingPlayers.findIndex((turn) => turn == serverState.my_turn);
+	let myTurnIndex = remainingPlayers.findIndex((turn) => turn == my_turn);
 
 	let nextPlayerIndex;
 
@@ -149,9 +149,9 @@ async function checkSameCards() {
 		}
 		clientState.selectedCards = [];
 		setTimeout(() => {
-			document.getElementById(cardId1).classList.remove('selected-card');
-			document.getElementById(cardId2).classList.remove('selected-card');
-		}, 1000);
+			document.getElementById(cardId1)?.classList.remove('selected-card');
+			document.getElementById(cardId2)?.classList.remove('selected-card');
+		}, 1500);
 	}
 }
 
