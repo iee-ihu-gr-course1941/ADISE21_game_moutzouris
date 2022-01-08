@@ -29,14 +29,14 @@ function checkStateChanged(state) {
 
 		updateCurrentPlayer();
 		const lastChangeDate = getLastChangeDate(game_state.last_change);
-		if (serverState.first_round != '1') {
+		if (serverState.first_round != 1 && serverState.round_no != clientState.previousRoundNumber) {
 			//Check if there are a few cards left
+			clientState.previousRoundNumber = serverState.round_no;
 			let total_player_cards = 0;
 			for (let set in player_cards) {
 				total_player_cards += player_cards[set].length;
 			}
-			seconds = total_player_cards < 15 ? 4 : 8;
-
+			seconds = total_player_cards < 12 ? 4 : 8;
 			activateDelay(lastChangeDate, seconds);
 		}
 	}
@@ -91,7 +91,7 @@ function getPlayerIndex() {
 function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
 
-	if (serverState.first_round == '1' && !clientState.winner && serverState.winner == 0) {
+	if (serverState.first_round == 1 && !clientState.winner && serverState.winner == 0) {
 		activateDelay(dateInTime, 18);
 	}
 	if (state.game_state.status == 'aborted') {
@@ -132,7 +132,7 @@ function gameLoop(state) {
 				}
 				if (nextPlayerIndex <= remainingPlayers.length - 1 && nextPlayerIndex != myTurnIndex) {
 					const nextPlayerTurn = remainingPlayers[nextPlayerIndex];
-					updateOponentCards(nextPlayerTurn, state?.player_cards[nextPlayerTurn]);
+					updateOpponentCards(nextPlayerTurn, state?.player_cards[nextPlayerTurn]);
 					nextPlayerIndex++;
 				} else if (nextPlayerIndex >= remainingPlayers.length) {
 					nextPlayerIndex = 0;
@@ -172,9 +172,12 @@ function activateDelay(last_change, seconds) {
 		document.getElementById('countdown').style.display = 'flex';
 
 		const tickFunction = () => {
+			if (secondsRemaining == 0) {
+				clientState.roundEnabled = false;
+			}
 			document.getElementById('countdown-seconds').innerText = `${secondsRemaining} δευτερόλεπτα`;
 			secondsRemaining--;
-			if (secondsRemaining == -1) {
+			if (secondsRemaining <= -1) {
 				clientState.roundEnabled = false;
 				document.getElementById('countdown').style.display = 'none';
 				clearInterval(tick);
@@ -183,7 +186,7 @@ function activateDelay(last_change, seconds) {
 		tickFunction();
 		const tick = setInterval(() => {
 			tickFunction();
-		}, 2000);
+		}, 1000);
 	}
 }
 
@@ -209,7 +212,7 @@ function getLastChangeDate(last_change) {
 
 setInterval(() => {
 	stateUpdate();
-}, 2000);
+}, 3000);
 
 function checkGameEnded() {
 	if (serverState.status == 'ended') {
@@ -283,6 +286,7 @@ function checkAvailablePlayer() {
 
 	if (my_turn == player_turn && !remainingPlayers.includes(parseInt(player_turn))) {
 		//Update turn
+		console.log(nextPlayerTurn);
 		fetch(`${url}/api/controller.php/board/end-turn/${nextPlayerTurn}`).then(() => {});
 	}
 }

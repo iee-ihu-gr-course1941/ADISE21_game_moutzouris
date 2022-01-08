@@ -70,6 +70,7 @@ CREATE TABLE game_status (
     `loser` enum('0', '1', '2', '3', '4') NOT NULL,
     `first_round` BOOLEAN NOT NULL DEFAULT TRUE,
     `last_change` timestamp DEFAULT NOW(),
+    `round_no` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 

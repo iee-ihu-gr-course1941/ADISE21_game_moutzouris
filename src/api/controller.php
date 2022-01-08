@@ -21,10 +21,6 @@ $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 switch ($r = array_shift($request)) {
     case 'board':
         switch ($b = array_shift($request)) {
-            case '':
-            case null:
-                // handle_board($method, $input);
-                break;
             case 'swap-card':
                 if (swap_card($request[0], $request[1], $request[2])) {
                     echo json_encode(array('status' => '200'));
@@ -49,10 +45,6 @@ switch ($r = array_shift($request)) {
                     echo json_encode(array('status' => '404'));
                 }
                 break;
-
-            case 'start-new-game':
-
-                break;
             default:
                 header("HTTP/1.1 404 Not Found");
                 break;
@@ -69,6 +61,7 @@ switch ($r = array_shift($request)) {
         ));
         break;
     case 'start-game':
+        
         $shuffledCards = shuffleCards();
         $number_of_players = getSessionPlayersNames();
         $player_turns = arrangeTurns();
@@ -78,6 +71,7 @@ switch ($r = array_shift($request)) {
         echo json_encode($shuffledCards);
         break;
     case 'game-status':
+
         $shuffled_cards = getShuffledCards();
         $cards_by_user = splitCardsByUser($shuffled_cards);
         $game_state = getGameState();
@@ -101,21 +95,18 @@ switch ($r = array_shift($request)) {
         break;
     case 'status':
         if (sizeof($request) == 0) {
-            // handle_status($method);
+            handleStatus($method);
         } else {
             header("HTTP/1.1 404 Not Found");
         }
-        break;
-    case 'players':
-        // handle_player($method, $request, $input);
         break;
     default:
         header("HTTP/1.1 404 Not Found");
         exit;
 }
 
-// function handleStatus($status){
-//     if ($status){
-//         return
-//     }
-// }
+function handleStatus($status){
+    if ($status){
+        echo json_encode(array('status' => '404','message' => 'Something went wrong'));
+    }
+}

@@ -25,7 +25,7 @@ function splitCardsByUser($shuffled_cards)
 function getGameState()
 {
     global $conn;
-    $sql = "SELECT status, player_turn, winner, loser, number_of_players, first_round, last_change FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
+    $sql = "SELECT status, player_turn, winner, loser, number_of_players, first_round, last_change, round_no FROM game_status WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result->fetch_assoc();
 }

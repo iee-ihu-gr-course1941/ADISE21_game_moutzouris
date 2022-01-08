@@ -79,7 +79,7 @@ function changeGameStatus($number_of_players)
 function prepareNextGame()
 {
     global $conn;
-    //Reset winner,loser and first_roundin game_status
+    //Reset winner,loser and first_round in game_status
     $sql = "UPDATE game_status SET first_round=1, winner='0', loser='0', last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result;

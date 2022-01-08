@@ -16,10 +16,6 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 	$pass = validate($_POST['password']);
 
 	
-
-
-
-
 	if (empty($username)) {
 		header("Location: ../index.php?error=Το όνομα χρήστη είναι απαραίτητο");
 		exit();

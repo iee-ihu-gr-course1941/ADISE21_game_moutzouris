@@ -3,7 +3,7 @@
 	padding: 0;
 }
 
-#oponent-cards {
+#opponent-cards {
 	width: 90%;
 	max-width: 90vw;
 	height: 15rem;
@@ -16,7 +16,7 @@
 	top: 3rem;
 }
 
-#oponent-cards > div > div {
+#opponent-cards > div > div {
 	height: 15rem;
 	display: flex;
 	flex-direction: row;
@@ -25,7 +25,7 @@
 	transform: rotate(180deg);
 }
 
-.oponent-container {
+.opponent-container {
 	max-width: 100%;
 }
 
@@ -39,22 +39,22 @@
 	max-width: 33%;
 }
 
-.oponent-container > h3,
-.oponent-container > h1 {
+.opponent-container > h3,
+.opponent-container > h1 {
 	text-align: center;
 	background-color: rgb(167, 46, 46);
 	padding: 0.2rem 0;
 	line-height: 2rem;
 }
 
-.oponent-container > h1 {
+.opponent-container > h1 {
 	border-radius: 0.5rem 0.5rem 0 0;
 }
-.oponent-container > h3 {
+.opponent-container > h3 {
 	border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.oponent-container {
+.opponent-container {
 	color: #eee;
 	border-radius: 0.5rem;
 }
@@ -68,7 +68,7 @@
 	color: rgb(57, 209, 118) !important;
 }
 
-.centered-oponent {
+.centered-opponent {
 	position: absolute;
 	top: 40vh;
 	width: 150rem;

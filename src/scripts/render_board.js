@@ -7,9 +7,9 @@ function updateMyCards(my_turn, cards) {
 	});
 }
 
-function updateOponentCards(player_turn, player_cards) {
-	let oponentContainer = document.getElementById(`oponent-container-${player_turn}`);
-	let oponentCards = document.getElementById(`oponent-cards-${player_turn}`);
+function updateOpponentCards(player_turn, player_cards) {
+	let opponentContainer = document.getElementById(`opponent-container-${player_turn}`);
+	let opponentCards = document.getElementById(`opponent-cards-${player_turn}`);
 
 	let nameHeader = document.createElement('h3');
 	nameHeader.id = `name-header-${player_turn}`;
@@ -26,36 +26,36 @@ function updateOponentCards(player_turn, player_cards) {
 		usernameHeader.classList.add('current-player');
 	}
 
-	if (!oponentContainer) {
-		oponentContainer = document.createElement('div');
-		oponentContainer.classList.add('oponent-container');
-		oponentContainer.id = `oponent-container-${player_turn}`;
+	if (!opponentContainer) {
+		opponentContainer = document.createElement('div');
+		opponentContainer.classList.add('opponent-container');
+		opponentContainer.id = `opponent-container-${player_turn}`;
 
-		oponentCards = document.createElement('div');
-		oponentCards.classList.add(`oponent-card-container`);
-		oponentCards.id = `oponent-cards-${player_turn}`;
+		opponentCards = document.createElement('div');
+		opponentCards.classList.add(`opponent-card-container`);
+		opponentCards.id = `opponent-cards-${player_turn}`;
 
-		oponentContainer.appendChild(usernameHeader);
-		oponentContainer.appendChild(nameHeader);
-		oponentContainer.appendChild(oponentCards);
+		opponentContainer.appendChild(usernameHeader);
+		opponentContainer.appendChild(nameHeader);
+		opponentContainer.appendChild(opponentCards);
 	} else {
-		document.getElementById(`oponent-cards-${player_turn}`).innerHTML = '';
+		document.getElementById(`opponent-cards-${player_turn}`).innerHTML = '';
 	}
 
 	for (let card of player_cards) {
 		const newCard = createCardContainer(player_turn, card);
-		oponentCards.append(newCard);
+		opponentCards.append(newCard);
 	}
 
 	if (serverState.number_of_players == 2) {
-		oponentContainer.classList.add('players-2');
+		opponentContainer.classList.add('players-2');
 	} else if (serverState.number_of_players == 3) {
-		oponentContainer.classList.add('players-3');
+		opponentContainer.classList.add('players-3');
 	} else {
-		oponentContainer.classList.add('players-4');
+		opponentContainer.classList.add('players-4');
 	}
 
-	document.getElementById('oponent-cards').appendChild(oponentContainer);
+	document.getElementById('opponent-cards').appendChild(opponentContainer);
 }
 
 function createCardContainer(player_turn, card) {
@@ -140,6 +140,10 @@ async function checkSameCards() {
 		}
 		if (cardName1 == cardName2) {
 			if (clientState.roundEnabled) {
+				setTimeout(() => {
+					document.getElementById(cardId1).style.display = 'none';
+					document.getElementById(cardId2).style.display = 'none';
+				}, 750);
 				const response = await fetch(`${url}/api/controller.php/board/discard-cards/${serverState.my_turn}/${cardId1}/${cardId2}`).then((res) => res.json());
 				if (response.status == 404) {
 					alert('Κάτι πήγε στραβά!');
@@ -151,7 +155,7 @@ async function checkSameCards() {
 		setTimeout(() => {
 			document.getElementById(cardId1)?.classList.remove('selected-card');
 			document.getElementById(cardId2)?.classList.remove('selected-card');
-		}, 1500);
+		}, 750);
 	}
 }
 

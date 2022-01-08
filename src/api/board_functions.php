@@ -13,7 +13,7 @@ function swap_card($from_player, $to_player, $card_id)
 function end_turn($next_player)
 {
     global $conn;
-    $sql = "UPDATE game_status set player_turn='$next_player', first_round=0, last_change=NOW()";
+    $sql = "UPDATE game_status set player_turn=$next_player, first_round=0, round_no = round_no + 1, last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result;
 }
@@ -41,7 +41,7 @@ function discard_cards($player_turn, $card_id_1, $card_id_2)
 function updateLastChange()
 {
     global $conn;
-    $sql = "UPDATE game_status set last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
+    $sql = "UPDATE game_status set first_round=0, last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";
     $result = mysqli_query($conn, $sql);
     return $result;
 }

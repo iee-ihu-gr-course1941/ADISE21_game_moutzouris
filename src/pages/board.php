@@ -34,7 +34,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                          <button onclick="location.href = '../auth/logout.php';" id="logout-button" class="logout-button">Αποσύνδεση</button>
                     </div>
                </div>
-               <div id="oponent-cards">
+               <div id="opponent-cards">
 
                </div>
                <div class="user-cards-row" id="my-cards">
@@ -67,7 +67,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                loser: undefined,
                last_change: undefined,
                status: undefined,
-               remainingPlayers: []
+               remainingPlayers: [],
+               round_no: 0
           };
 
 
@@ -79,7 +80,8 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                loserShown: false,
                loser: undefined,
                usernames: {},
-               clientInitialized: false
+               clientInitialized: false,
+               previousRoundNumber: 0
           };
      </script>
 
