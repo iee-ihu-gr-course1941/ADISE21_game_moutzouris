@@ -92,7 +92,7 @@ function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
 
 	if (serverState.first_round == 1 && !clientState.winner && serverState.winner == 0) {
-		activateDelay(dateInTime, 18);
+		activateDelay(dateInTime, 25);
 	}
 	if (state.game_state.status == 'aborted') {
 		alert('Το παιχνίδι διακόπηκε!');
