@@ -38,73 +38,46 @@
 
 Ο πίνακας game_session περιέχει την κατάσταση του παίκτη:
 
+|Attribute   |  Description  			 |  Values	         |
+|------------|-----------------------------------|---------	         |
+|id          | Primary key   			 | int  AUTO_INCREMENT   |	
+|session_id  | Στο session id που βρίσκεται      | int	  	         |
+|username    | Ονομα του παίκτη	     	         | varchar	         |
+|user_id     | To ID του Παίκτη  		 | int    	         |
+|player_turn | τρέχων σειρά του παίκτη   	 |'1', '2', '3', '4'     |
+|user_token  | Primary key    			 | varchar               |	
+|wins        | Νικες	     			 | int 	  	         |
+|loses       | Ητες           			 | int                   |
+
+Ο πίνακας cards περιέχει όλες τις κάρτες 
+
 |Attribute   |  Description  			 |  Values	    |
 |------------|-----------------------------------|---------	    |
 |id          | Primary key   			 | int   	    |	
-|session_id  | Στο session id που βρίσκεται      | int	  	    |
-|username    | Ονομα	     			 | varchar	    |
-|user_id     | To ID του Παίκτη  		 | int    	    |
-|player_turn | τρέχων σειρά του παίκτη| varchar	 |'1', '2', '3', '4'|
-|user_token  | Primary key    			 | varchar          |	
-|wins        | 	Νικες	     			 | int 	  	    |
-|loses       | Ητες           			 | int              |
+|cardname    | Αριθμος κάρτας    		 | varchar	    |
+|cardchar    | Ομάδα κάρτας      	         | varchar	    |
+|url         | Εικόνα κάρτας			 | url    	    |
 
 
-Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
-```
-CREATE TABLE cards (
-    `id` int NOT NULL,
-    `cardname` varchar(255) NOT NULL,
-    `cardchar` varchar(255) NOT NULL,
-    `url` varchar(2000) NOT NULL,
-    PRIMARY KEY(id)
-);
-```
-```
-INSERT INTO
-    cards
-VALUES
-    (
-        1,
-        'ace',
-        'clubs',
-        'https://upload.wikimedia.org/wikipedia/commons/3/36/Playing_card_club_A.svg'
-    );
-```
+Ο πίνακας current_cards περιέχει τα primary id των καρτών σε ένα τρέχων game_session:
 
-Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού δηλαδή κατάσταση των παικτών, σειρά παικτών,αριθμό παικτών, τους νικητές και το session που βρίσκονται οι παίκτες. 
-```
-CREATE TABLE game_status (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `status` enum(
-        'initialized',
-        'started',
-        'ended',
-        'aborted'
-    ) NOT NULL DEFAULT 'initialized',
-    `player_turn` int NOT NULL DEFAULT 1,
-    `number_of_players` int NOT NULL,
-    `winner` int DEFAULT NULL,
-    `last_change` timestamp DEFAULT NOW(),
-    `session_id` int not null,
-    PRIMARY KEY (id)
-);
-```
 
-Ο πίνακας current_cards περιέχει το primary id των καρτών από τον πίνακα cards, όνομα καρτών, το primary id των χρηστών, την σειρά και το session id από τον πίνακα game_session το primary id του. 
-```
-CREATE TABLE current_cards (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `card_id` int NOT NULL,
-    `card_name` varchar(255) NOT NULL,
-    `player_id` int NOT NULL,
-    `player_turn` enum('1', '2', '3', '4'),
-    `session_id` int NOT NULL,
-    PRIMARY KEY(id)
-);
-```
+|Attribute    |  Description  			 |  Values	  			 |
+|----------- -|-----------------------------------|---------	   			 |
+|id           | Primary key   				  | int  AUTO_INCREMENT 	 |	
+|card_in      | id της καρτας		       		  | int	   		         |
+|card_name    | Αριθμός της κάρτας      	          | varchar	   		 |
+|player_id    | Τρέχων παίκτης που την έχει		  | int  	   		 |
+|player_turn  | Σειρά του παίκτη που έχει την κάρτα       | ('1', '2', '3', '4')	 |
+|session_id   | Το session το οποίο είναι ενεργο	  | int  	   		 |
 
-Στο αρχείο db_upass.php, βρίσκεται το username της βάσης και ο κωδικός.
+
+Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού:
+
+
+
+
+Στο αρχείο ```db_upass.php```, βρίσκεται το username της βάσης και ο κωδικός.
 ```
 <?php
 	$DB_PASS = 'sakasaka';
@@ -112,7 +85,7 @@ CREATE TABLE current_cards (
 ?>
 ```
 
-Στο αρχείο db_conn.php, κάνει την σύνδεση της απομακρυσμένης βάσης με τα παραπάνω στοιχειά. Σε περίπτωση που τα στοιχειά δεν αντιστοιχούνται κανονικά θα εμφανίσει ένα error. Η εντολή ```$conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');``` κάνει την σύνδεση της βάσης με τα παρακάτω στοιχειά.
+Στο αρχείο ```db_conn.php```, κάνει την σύνδεση της απομακρυσμένης βάσης με τα παραπάνω στοιχειά. Σε περίπτωση που τα στοιχειά δεν αντιστοιχούνται κανονικά θα εμφανίσει ένα error. Η εντολή ```$conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');``` κάνει την σύνδεση της βάσης με τα παρακάτω στοιχειά.
 
 # Σχεδίαση της Login Σελίδας
 
