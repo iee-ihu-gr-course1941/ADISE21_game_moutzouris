@@ -62,14 +62,14 @@
 Ο πίνακας current_cards περιέχει τα primary id των καρτών σε ένα τρέχων game_session:
 
 
-|Attribute    |  Description  				    Values	  		 |
-|-------------|-------------------------------------------|----------------------------- |
-|id           | Primary key   				  | int  AUTO_INCREMENT 	 |	
-|card_in      | id της καρτας		       		  | int	   		         |
-|card_name    | Αριθμός της κάρτας      	          | varchar	   		 |
-|player_id    | Τρέχων παίκτης που την έχει		  | int  	   		 |
-|player_turn  | Σειρά του παίκτη που έχει την κάρτα       | ('1', '2', '3', '4')	 |
-|session_id   | Το session το οποίο είναι ενεργο	  | int  	   		 |
+| Attribute    |  Description  				    Values	  		 |
+|--------------|-------------------------------------------|-----------------------------|
+| id           | Primary key   				   | int  AUTO_INCREMENT 	 |	
+| card_in      | id της καρτας		       		   | int	   		 |
+| card_name    | Αριθμός της κάρτας      	           | varchar	   		 |
+| player_id    | Τρέχων παίκτης που την έχει		   | int  	   		 |
+| player_turn  | Σειρά του παίκτη που έχει την κάρτα       | ('1', '2', '3', '4')	 |
+| session_id   | Το session το οποίο είναι ενεργο	   | int  	   		 |
 
 
 Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού:
