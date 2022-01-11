@@ -62,8 +62,8 @@
 Ο πίνακας current_cards περιέχει τα primary id των καρτών σε ένα τρέχων game_session:
 
 
-|Attribute    |  Description  			 |  Values	  			 |
-|----------- -|-----------------------------------|---------	   			 |
+|Attribute    |  Description  				    Values	  		 |
+|-------------|-------------------------------------------|----------------------------- |
 |id           | Primary key   				  | int  AUTO_INCREMENT 	 |	
 |card_in      | id της καρτας		       		  | int	   		         |
 |card_name    | Αριθμός της κάρτας      	          | varchar	   		 |
