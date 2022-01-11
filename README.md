@@ -25,7 +25,7 @@
 
 # Σχεδίαση της βάσης 
 
-Στο αρχειο ```schema.sql```, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
+Στο αρχειο ```schema.sql```, Στην βάση με όνομα ```DATABASE moutzouris``` φτιάχνουνε πινάκες: 
 
 
 Ο Πίνακας users:
@@ -71,10 +71,14 @@
 | player_turn  | Σειρά του παίκτη που έχει την κάρτα       | ('1', '2', '3', '4')	 |
 | session_id   | Το session το οποίο είναι ενεργο	   | int  	   		 |
 
-
 Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού:
 
 
+| Attribute    |  Description  				   | Values	  		 		     |
+|--------------|-------------------------------------------|-----------------------------		     |
+| id           | Primary key   				   | int  AUTO_INCREMENT 			     |	
+| session_id   | id  Το session το οποίο είναι ενεργο      | enum( 'initialized', 'started','ended','aborted'|
+| status       | Η κατάσταση του παιχνιδιού                | varchar	   				     |
 
 
 Στο αρχείο ```db_upass.php```, βρίσκεται το username της βάσης και ο κωδικός.
