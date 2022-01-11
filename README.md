@@ -339,14 +339,16 @@ function checkGameInstance($session_id)
  
 # Σχεδίαση του παιχνιδιού
 
-Οι κύριες υλοποιήσεις συναρτήσεων για το παιχνίδι βρίσκονται στο αρχείο ```game_functions.php```
+Οι κύριες υλοποιήσεις συναρτήσεων για το παιχνίδι πρωτού ξεκινήσει, βρίσκονται στο αρχείο ```game_functions.php```
 
-* Η Συνάρτηση ```getShuffledCards() ``` με το ερώτημα ``` $sql = "SELECT id, cardname FROM cards WHERE cardchar != 'back'";``` ανακατεύει τις κάρτες οι οποίες αντιστοιχούν στο συγκεκριμένο ενεργό session.
+* Η συνάρτηση ```getShuffledCards() ``` με το ερώτημα ``` $sql = "SELECT id, cardname FROM cards WHERE cardchar != 'back'";``` ανακατεύει τις κάρτες οι οποίες αντιστοιχούν στο συγκεκριμένο ενεργό session.
 
-* Η Συνάρτηση ```dealCards($shuffledCards, $player_turns)``` Μοιράζει τις ανακατεμένες κάρτες στους παίκτες που βρίσκονται σε ένα game_session όλοι μαζί με το ερώτημα ```$sql = "INSERT INTO current_cards values (default, '$card[0]', '$card[1]','$user_id', '$i','{$_SESSION['session_id']}')"; ``` 
+* Η συνάρτηση ```dealCards($shuffledCards, $player_turns)``` Μοιράζει τις ανακατεμένες κάρτες στους παίκτες που βρίσκονται σε ένα game_session όλοι μαζί με το ερώτημα ```$sql = "INSERT INTO current_cards values (default, '$card[0]', '$card[1]','$user_id', '$i','{$_SESSION['session_id']}')"; ``` 
 
-* Η αλλαγή σειράς ανάμεσα στους παίκτες πραγματοποιείτε με την συνάρτηση ```arrangeTurns()``` με την εντολή ```$sql = "SELECT user_id FROM game_session WHERE session_id='{$_SESSION['session_id']}'";```
+* Ο καθορισμός της σειράς του παιχνιδιού ανάμεσα στους παίκτες πραγματοποιείτε με την συνάρτηση ```arrangeTurns()``` με την εντολή ```$sql = "SELECT user_id FROM game_session WHERE session_id='{$_SESSION['session_id']}'";```
 
+* Η συνάρτηση ```changeGameStatus($number_of_players)```  κάνει update το τρέχων game_status σε κατάσταση ```started``` του παιχνιδιού για να ξεκινήσει, με την εντολή ``` $sql = "UPDATE game_status SET status = 'started', number_of_players=$number_of_players,last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";```
 
+Οι συναρτήσεις που βρίσκονται στο αρχείο ```game_loop_function.php ``` , υλοποιούν ενέργειες για τα ενεργά παιχνίδια ```(δηλαδή game_status, game_status=’started’)  ``` 
 
 
