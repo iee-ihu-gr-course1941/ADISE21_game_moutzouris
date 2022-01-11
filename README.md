@@ -124,28 +124,6 @@ CREATE TABLE current_cards (
 
 Στο αρχείο db_conn.php, κάνει την σύνδεση της απομακρυσμένης βάσης με τα παραπάνω στοιχειά. Σε περίπτωση που τα στοιχειά δεν αντιστοιχούνται κανονικά θα εμφανίσει ένα error. Η εντολή ```$conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');``` κάνει την σύνδεση της βάσης με τα παρακάτω στοιχειά.
 
-
-```
-<?php
-$host = 'localhost';
-$db = 'moutzouris';
-require_once "db_upass.php";
-
-$user = $DB_USER;
-$pass = $DB_PASS;
-
-if (gethostname() == 'users.iee.ihu.gr') {
-    $conn = new mysqli($host, $user, $pass, $db, null, '/home/student/it/2015/it154486/mysql/run/mysql.sock');
-} else {
-    $conn = new mysqli($host, $user, '', $db);
-}
-
-if ($conn->connect_errno) {
-    echo "Failed to connect to MySQL: (" .
-        $conn->connect_errno . ") " . $conn->connect_error;
-}
-```
-
 # Σχεδίαση της Login Σελίδας
 
 Η κύρια σελίδα αποτελείται από δυο βασικά αρχεία. ```Το index.php``` και ```login.php``` 
