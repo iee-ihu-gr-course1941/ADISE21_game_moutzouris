@@ -339,4 +339,7 @@ function checkGameInstance($session_id)
  
 # Σχεδίαση του παιχνιδιού
 
+Οι κύριες υλοποιήσεις συναρτήσεων για το παιχνίδι βρίσκονται στο αρχείο ```
 
+* Η Συνάρτηση ```getShuffledCards() ``` με το ερώτημα ```$sql = "SELECT card_id, card_name, player_id, player_turn, url FROM current_cards INNER JOIN cards ON cards.id=current_cards.card_id WHERE session_id='{$_SESSION['session_id']}' ORDER BY card_name";``` ανακατεύει τις κάρτες οι οποίες αντιστοιχούν στο συγκεκριμένο ενεργό session.
+* Η αλλαγή σειράς ανάμεσα στους παίκτες πραγματοποιείτε με την συνάρτηση ```getPlayerTurn()``` με την εντολή ```    $sql = "SELECT player_turn FROM game_session WHERE session_id='{$_SESSION['session_id']}' AND user_token='{$_SESSION['user_token']}'";``` 
