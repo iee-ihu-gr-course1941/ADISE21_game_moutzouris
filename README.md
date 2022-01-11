@@ -25,27 +25,18 @@
 
 # Σχεδίαση της βάσης 
 
-Στο αρχειο schema.sql, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
+Στο αρχειο ```schema.sql```, Στην βάση με όνομα moutzouris φτιάχνουνε πινάκες: 
 
-Ο Πίνακας users περιεχέι username,password και ένα id. Επίσης φαίνεται η λογική του insert. Το default πεδίο παίρνει την ιδιότητα του auto_increment.
-```
-CREATE DATABASE moutzouris;
-```
 
-```
-CREATE TABLE users (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `username` varchar(255) NOT NULL,
-    `password` varchar(255) NOT NULL,
-    PRIMARY KEY (id)
-);
+Ο Πίνακας users:
 
-```
-```
-INSERT INTO `users` VALUES (default, 'panos', 'abc');
-INSERT INTO `users` VALUES (default, 'miltos', 'abc');
-INSERT INTO `users` VALUES (default, 'stavros', 'abc');
-```
+|Attribute  |  Description   |  Values |
+|-----------|----------------|---------|
+|id         | Priamry key    | int     |	
+|username   | Ονομα	     | varchar |
+|password   | Κωδικός        | varchar |
+
+
 
 Ο πίνακας game_session περιέχει την κατάσταση του παίκτη. Όπως την σειρά του, το primary id του από τον πίνακα users, σε πιο session παιχνιδιού είναι και to token του.   
 ```
