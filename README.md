@@ -38,16 +38,16 @@
 
 Ο πίνακας game_session περιέχει την κατάσταση του παίκτη:
 
-|Attribute   |  Description   |  Values |
-|------------|----------------|---------|
-|id          | Primary key    | int     |	
-|username    | Ονομα	      | varchar |
-|player_turn | Κωδικός        | varchar |
-|user_id  | Primary key    | int     |
-|player_turn | Κωδικός        | varchar |
-|user_token  | Primary key    | int     |	
-|wins        | Ονομα	      | varchar |
-|loses       | Κωδικός        | varchar |
+|Attribute   |  Description  			 |  Values	    |
+|------------|-----------------------------------|---------	    |
+|id          | Primary key   			 | int   	    |	
+|session_id  | Στο session id που βρίσκεται      | int	  	    |
+|username    | Ονομα	     			 | varchar	    |
+|user_id     | To ID του Παίκτη  		 | int    	    |
+|player_turn | τρέχων σειρά του παίκτη| varchar	 |'1', '2', '3', '4'|
+|user_token  | Primary key    			 | varchar          |	
+|wins        | 	Νικες	     			 | int 	  	    |
+|loses       | Ητες           			 | int              |
 
 
 Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
