@@ -32,24 +32,23 @@
 
 |Attribute  |  Description   |  Values |
 |-----------|----------------|---------|
-|id         | Priamry key    | int     |	
+|id         | Primary key    | int     |	
 |username   | Ονομα	     | varchar |
 |password   | Κωδικός        | varchar |
 
+Ο πίνακας game_session περιέχει την κατάσταση του παίκτη:
 
+|Attribute   |  Description   |  Values |
+|------------|----------------|---------|
+|id          | Primary key    | int     |	
+|username    | Ονομα	      | varchar |
+|player_turn | Κωδικός        | varchar |
+|user_id  | Primary key    | int     |
+|player_turn | Κωδικός        | varchar |
+|user_token  | Primary key    | int     |	
+|wins        | Ονομα	      | varchar |
+|loses       | Κωδικός        | varchar |
 
-Ο πίνακας game_session περιέχει την κατάσταση του παίκτη. Όπως την σειρά του, το primary id του από τον πίνακα users, σε πιο session παιχνιδιού είναι και to token του.   
-```
-CREATE TABLE game_session (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `session_id` int,
-    `username` varchar(255) NOT NULL,
-    `user_id` int NOT NULL,
-    `player_turn` enum('1', '2', '3', '4'),
-    `user_token` varchar(20) NOT NULL,
-    PRIMARY KEY (id)
-);
-```
 
 Ο πίνακας cards περιέχει όλες τις κάρτες με ένα id, ένα όνομα , μια κλάση και μια εικόνα σε ενα url.
 ```
