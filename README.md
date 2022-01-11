@@ -247,95 +247,21 @@ if (empty($username)) {
 Mε την συνάρτηση  getAvailableSession() φτιάχνει ένα session αν δεν υπάρχει ήδη. Όταν υπάρχει session βάζει μέχρι 4 παίκτες και αν έχει γεμίσει, τότε φτιάχνει ένα καινούργιο session.
 
 * Με το ερώτημα ```$sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";``` επιστρέφει σε μια μεταβλητή των αριθμό των παικτών από τον πινάκα game_session οι οποίοι δεν βρίσκονται σε session.
-```
-function getAvailableSession()
-{
-    global $conn;
-    //Get all sessions with under 4 players
-    $sql = "SELECT DISTINCT session_id, COUNT(*) as number_of_players FROM game_session WHERE session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended') GROUP BY session_id";
-    $result = mysqli_query($conn, $sql);
-    while ($row = $result->fetch_assoc()) {
-        if ($row['number_of_players'] < 4) {
-            //Return the available session
-            return $row['session_id'];
-        }
-    }
-```
+
 * Αν το session έχει γεμίσει και είναι πάνω από 4 παίκτες τότε με το ερώτημα ```$sql = "SELECT max(id) as last_session_id FROM game_status";``` φτιάχνει ένα νέο session με id του προηγούμενου session +1. ``` $current_session = $data['last_session_id'] + 1; ```
 * Οι παίκτες μπαίνουν σε νέο session με την συνάρτηση ``` function addUserToSession($session_id) ```
-
-```
-$sql = "SELECT max(id) as last_session_id FROM game_status";
-    $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_assoc();
-    $current_session = $data['last_session_id'] + 1;
-
-    //Add player to game_session table
-    if (isset($_SESSION['user_id'])) {
-        addUserToSession($current_session);
-    }
-```
 
 * Η Συνάρτηση ``` checkIfPlayerInSession() ``` ελέγχει αν ο χρήστης έχει session αλλιώς καλεί την ``` function addUserToSession() ``` 
 * Με το ερώτημα ```  $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";``` ελέγχει το id του user αν βρίσκεται σε κάποιον πινάκα του game_session  όπου το πεδίο status του πίνακα game_status δεν βρίσκεται σε κατάσταση aborted ή ended. 
 
-
-```
-function checkIfPlayerInSession()
-{
-    global $conn;
-    if (isset($_SESSION['user_id'])) {
-
-        //Check if player is already in a session
-        $sql = "SELECT session_id FROM game_session WHERE user_id='{$_SESSION['user_id']}' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
-        $result = mysqli_query($conn, $sql);
-        $data = $result->fetch_assoc();
-```
 * Αν δεν έχει session τότε καλεί την  ``` getAvailableSession(); ``` για να βρει διαθέσιμο session, επιστρέφει ένα διαθέσιμο session_id με λιγότερα από τέσσερις παίκτες.
 * Καλεί την ``` function addUserToSession() ``` για να τον προσθέσει. 
-```
-        } else {
 
-            //If is not in a session, add into one
-            $available_session = getAvailableSession();
-            if (isset($available_session)) {
-                addUserToSession($available_session);
-            }
-        }
-    }
-}
-```
-* Η συνάρτηση ``` function addUserToSession() ``` 
-```
-function addUserToSession($session_id)
-{
-    global $conn;
-    $sql = "INSERT INTO game_session values (default, $session_id,'{$_SESSION['username']}', '{$_SESSION['user_id']}', 1 ,'{$_SESSION['user_token']}')";
-    mysqli_query($conn, $sql);
-    $_SESSION['session_id'] = $session_id;
-    checkGameInstance($session_id);
-}
-```
 * Η συνάρτηση ```checkGameInstance()``` φτιάχνει την κατάσταση του παιχνιδιού 
 *  Ελέγχει το session ενός παιχνιδιού έχει ξεκινήσει με το ερώτημα ``` $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')"; ```
 * Αν το session δεν έχει κάποια κατάσταση, τότε φτιάχνει μια κατάσταση  με το ερώτημα ```$sql = "INSERT INTO game_status VALUES (default, default, 1, 1, 0, NOW(), '$session_id')"; ```
 
-``` 
-function checkGameInstance($session_id)
-{
-    global $conn;
-    //Check if instance of game is already initialized or initialize one
-    $sql = "SELECT * FROM game_status WHERE session_id='$session_id' AND session_id NOT IN (SELECT session_id FROM game_status WHERE status='aborted' OR status='ended')";
-    $result = mysqli_query($conn, $sql);
-    $data = $result->fetch_assoc();
 
-    //If there is no instance, create a new one
-    if (empty($data)) {
-        $sql = "INSERT INTO game_status VALUES (default, default, 1, 1, 0, NOW(), '$session_id')";
-        $result = mysqli_query($conn, $sql);
-    }
-}
-```
  
 # Σχεδίαση του παιχνιδιού
 
@@ -349,6 +275,9 @@ function checkGameInstance($session_id)
 
 * Η συνάρτηση ```changeGameStatus($number_of_players)```  κάνει update το τρέχων game_status σε κατάσταση ```started``` του παιχνιδιού για να ξεκινήσει, με την εντολή ``` $sql = "UPDATE game_status SET status = 'started', number_of_players=$number_of_players,last_change=NOW() WHERE session_id='{$_SESSION['session_id']}'";```
 
-Οι συναρτήσεις που βρίσκονται στο αρχείο ```game_loop_function.php ``` , υλοποιούν ενέργειες για τα ενεργά παιχνίδια ```(δηλαδή game_status, game_status=’started’)  ``` 
+Οι συναρτήσεις που βρίσκονται στο αρχείο ```game_loop_function.php ``` , υλοποιούν ενέργειες για τα τρέχων ενεργά παιχνίδια ```(δηλαδή game_status, game_status=’started’)  ``` 
 
+*Η συνάρτηση ``` getPlayerTurn()``` παίρνει ο παίκτης την σειρά του, η εντολή που επιτυγχάνεται  ``` $sql = "SELECT player_turn FROM game_session WHERE session_id='{$_SESSION['session_id']}' AND user_token='{$_SESSION['user_token']}'";```
+
+* Η συνάρτηση ```getRemainingPlayers($cards_by_player) ``` ελέγχει κάθε φορά αν ένας παίκτης βγήκε από το παιχνίδι (δηλαδή κέρδισε) με την εντολή foreach ($cards_by_player as $player_turn=> $cards) {array_push($remainingPlayers, $player_turn);}
 
