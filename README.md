@@ -182,5 +182,5 @@ CREATE TABLE current_cards (
 
 * Η συνάρτηση ``` getPlayerTurn()``` παίρνει ο παίκτης την σειρά του, η εντολή που επιτυγχάνεται  ``` $sql = "SELECT player_turn FROM game_session WHERE session_id='{$_SESSION['session_id']}' AND user_token='{$_SESSION['user_token']}'";```
 
-* Η συνάρτηση ```getRemainingPlayers($cards_by_player) ``` ελέγχει κάθε φορά αν ένας παίκτης βγήκε από το παιχνίδι (δηλαδή κέρδισε) με την εντολή foreach ($cards_by_player as $player_turn=> $cards) {array_push($remainingPlayers, $player_turn);}
+* Η συνάρτηση ```getRemainingPlayers($cards_by_player) ``` ελέγχει κάθε φορά αν ένας παίκτης βγήκε από το παιχνίδι (δηλαδή κέρδισε) με την εντολή ```foreach ($cards_by_player as $player_turn=> $cards) {array_push($remainingPlayers, $player_turn);}```
 
