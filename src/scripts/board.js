@@ -172,6 +172,7 @@ function activateDelay(last_change, seconds) {
 		document.getElementById('countdown').style.display = 'flex';
 
 		const tickFunction = () => {
+			console.log('seconds remaining:', secondsRemaining)
 			if (secondsRemaining == 0) {
 				clientState.roundEnabled = false;
 			}

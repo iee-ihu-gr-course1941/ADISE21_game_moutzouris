@@ -54,8 +54,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['username'])) {
                </div>
           </div>
 
-
-
      </body>
      <script>
           let serverState = {
