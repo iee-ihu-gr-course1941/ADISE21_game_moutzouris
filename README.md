@@ -185,3 +185,6 @@
 
 * Η συνάρτηση ```function swapCard(fromPlayer, toPlayer, cardId)``` αλλάζει τα χαρτιά του αριστερού παίκτη με τον τρέχων παίκτη. Η εντολή που το υλοποιεί αυτό είναι ```nextPlayerTurn = serverState.remainingPlayers[nextPlayerIndex];``` ώστε να πάρει τον επόμενο παίκτη που βρίσκεται στα αριστερά και η εντολή  ```response = await fetch(`${url}/api/controller.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());``` κάνει την αλλαγή των καρτών.
 
+* Η συνάρτηση ```function selectCard(card) ``` χρησιμοποιείται για να επιλέξουμε μια κάρτα. Η επιλογή γίνεται με την εντολή ```	document.getElementById(id).classList.add('selected-card');```
+
+* συνάρτηση ```function updateMyCards(my_turn, cards)```  χρησιμοποιείται για να επιλέξουμε τις δυο κάρτες που θέλουμε να διώξουμε. 
