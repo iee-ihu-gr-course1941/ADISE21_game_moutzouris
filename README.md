@@ -187,4 +187,8 @@
 
 * Η συνάρτηση ```function selectCard(card) ``` χρησιμοποιείται για να επιλέξουμε μια κάρτα. Η επιλογή γίνεται με την εντολή ```	document.getElementById(id).classList.add('selected-card');```
 
-* συνάρτηση ```function updateMyCards(my_turn, cards)```  χρησιμοποιείται για να επιλέξουμε τις δυο κάρτες που θέλουμε να διώξουμε. 
+* Η συνάρτηση ```function updateMyCards(my_turn, cards)```  χρησιμοποιείται για να επιλέξουμε τις δυο κάρτες που θέλουμε να διώξουμε και έπειτα καλείτε ```function selectCard(card) ``` Όπου μας δείχνει καλύτερα τα πεδία των επιλεγμένων καρτών αναλυτικά με τις αντίστοιχες εντολές ```id = card.getAttribute('id');```
+
+* Η συνάρτηση ```function getNextPlayerTurn()``` Αλλάζει την σειρά από το τρέχων ενεργό παίκτη στον επόμενο ενεργό παίκτη. Παίρνει την κατάσταση με ```const { my_turn, number_of_players, remainingPlayers } = serverState; ``` και έπειτα αλλάζει την σειρά με ```nextPlayerIndex = myTurnIndex + 1;``` 
+
+
