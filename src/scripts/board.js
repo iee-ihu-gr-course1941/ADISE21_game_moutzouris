@@ -36,7 +36,7 @@ function checkStateChanged(state) {
 			for (let set in player_cards) {
 				total_player_cards += player_cards[set].length;
 			}
-			seconds = total_player_cards < 12 ? 4 : 8;
+			seconds = total_player_cards < 12 ? 4 : 6;
 			activateDelay(lastChangeDate, seconds);
 		}
 	}
@@ -92,7 +92,7 @@ function gameLoop(state) {
 	const dateInTime = getLastChangeDate(state.game_state.last_change);
 
 	if (serverState.first_round == 1 && !clientState.winner && serverState.winner == 0) {
-		activateDelay(dateInTime, 30);
+		activateDelay(dateInTime, 25);
 	}
 	if (state.game_state.status == 'aborted') {
 		alert('Το παιχνίδι διακόπηκε!');
@@ -172,7 +172,7 @@ function activateDelay(last_change, seconds) {
 		document.getElementById('countdown').style.display = 'flex';
 
 		const tickFunction = () => {
-			console.log('seconds remaining:', secondsRemaining)
+			console.log('seconds remaining:', secondsRemaining);
 			if (secondsRemaining == 0) {
 				clientState.roundEnabled = false;
 			}

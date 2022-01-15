@@ -183,6 +183,7 @@
 	align-items: center;
 	justify-content: space-evenly;
 	column-gap: 4rem;
+	color: #eee;
 }
 
 .actions > button:nth-child(1) {
@@ -200,7 +201,7 @@
 	justify-content: center;
 	align-items: center;
 	color: rgb(255, 255, 255);
-	background-color: #56626f;
+	background-color: #52575b;
 	border-radius: 0.4rem;
 	row-gap: 0.2rem;
 	width: fit-content;
