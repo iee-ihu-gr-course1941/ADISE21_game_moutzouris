@@ -30,46 +30,46 @@
 
 Ο Πίνακας users:
 
-|Attribute  |  Description   |  Values |
-|-----------|----------------|---------|
-|id         | Primary key    | int     |	
-|username   | Ονομα	     | varchar |
-|password   | Κωδικός        | varchar |
+|Attribute  |  Description   |  Values			      |
+|-----------|----------------|---------			      |
+|id         | Primary key    | int NOT NULL AUTO_INCREMENT    |	
+|username   | Ονομα	     | varchar(255) NOT NULL 	      |
+|password   | Κωδικός        | varchar(255) NOT NULL 	      |
 
 Ο πίνακας game_session περιέχει την κατάσταση του παίκτη:
 
-|Attribute   |  Description  			 |  Values	         |
-|------------|-----------------------------------|---------	         |
-|id          | Primary key   			 | int  AUTO_INCREMENT   |	
-|session_id  | Στο session id που βρίσκεται      | int	  	         |
-|username    | Ονομα του παίκτη	     	         | varchar	         |
-|user_id     | To ID του Παίκτη  		 | int    	         |
-|player_turn | τρέχων σειρά του παίκτη   	 |'1', '2', '3', '4'     |
-|user_token  | Primary key    			 | varchar               |	
-|wins        | Νικες	     			 | int 	  	         |
-|loses       | Ητες           			 | int                   |
+|Attribute   |  Description  			 |  Values	         	  |
+|------------|-----------------------------------|---------	         	  |
+|id          | Primary key   			 | int NOT NULL  AUTO_INCREMENT   |	
+|session_id  | Στο session id που βρίσκεται      | int	  	        	  |
+|username    | Ονομα του παίκτη	     	         | varchar (255) NOT NULL	  |
+|user_id     | To ID του Παίκτη  		 | int NOT NULL   	          |
+|player_turn | τρέχων σειρά του παίκτη   	 |enum('1', '2', '3', '4' )       |
+|user_token  | Primary key    			 | varchar             		  |	
+|wins        | Νικες	     			 | int NOT NULL DEFAULT 0	  |
+|loses       | Ητες           			 | int NOT NULL DEFAULT           |
 
 Ο πίνακας cards περιέχει όλες τις κάρτες 
 
-|Attribute   |  Description  			 |  Values	    |
-|------------|-----------------------------------|---------	    |
-|id          | Primary key   			 | int   	    |	
-|cardname    | Αριθμος κάρτας    		 | varchar	    |
-|cardchar    | Ομάδα κάρτας      	         | varchar	    |
-|url         | Εικόνα κάρτας			 | url    	    |
+|Attribute   |  Description  			 |  Values	    	            |
+|------------|-----------------------------------|---------	   		    |
+|id          | Primary key   			 | int NOT NULL	    		    |	
+|cardname    | Αριθμος κάρτας    		 | varchar(255) NOT NULL	    |
+|cardchar    | Ομάδα κάρτας      	         | varchar(255) NOT NULL	    |
+|url         | Εικόνα κάρτας			 | varchar(2000) NOT NULL    	    |
 
 
 Ο πίνακας current_cards περιέχει τα primary id των καρτών σε ένα τρέχων game_session:
 
 
 | Attribute    |  Description  				   | Values	  		 |
-|--------------|-------------------------------------------|-----------------------------|
-| id           | Primary key   				   | int  AUTO_INCREMENT 	 |	
-| card_in      | id της καρτας		       		   | int	   		 |
-| card_name    | Αριθμός της κάρτας      	           | varchar	   		 |
-| player_id    | Τρέχων παίκτης που την έχει		   | int  	   		 |
-| player_turn  | Σειρά του παίκτη που έχει την κάρτα       | ('1', '2', '3', '4')	 |
-| session_id   | Το session το οποίο είναι ενεργο	   | int  	   		 |
+|--------------|-------------------------------------------|-----------------------------	 |
+| id           | Primary key   				   | int  AUTO_INCREMENT 	 	 |	
+| card_in      | id της καρτας		       		   | int NOT NULL	   		 |
+| card_name    | Αριθμός της κάρτας      	           | varchar(255) NOT NULL	   	 |
+| player_id    | Τρέχων παίκτης που την έχει		   |  int NOT NULL  	   		 |
+| player_turn  | Σειρά του παίκτη που έχει την κάρτα       | enum('1', '2', '3', '4')	 	 |
+| session_id   | Το session το οποίο είναι ενεργο	   | int NOT NULL	   		 |
 
 Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού:
 
@@ -82,10 +82,9 @@
 | number_of_players 	| Αριθμός παικτών      			    | INT NOT NULL				      |
 | winner		| Νικητής Παίκτης               	    | enum('0', '1', '2', '3','4' ), NOT NULL	      |
 | loser			| Χαμενός Παίκτης               	    | enum('0', '1', '2', '3','4' ), NOT NULL	      |
-| id           		| Primary key   			    | int  AUTO_INCREMENT 			      |	
 | first_round  		| Παίκτης που παίρνει τον πρώτο γυρο        | BOOLEAN NOT NULL DEFAULT TRUE		      |
-| last_change    	| τελευταία αλλαγή που έγινε στην βάση      | timestamp DEFAULT NOW()	   		      |
-| round_no     		| αριθμός τρέχων γύρων              	    | INT NOT NULL DEFAULT 0			      |
+| last_change    	| Τελευταία αλλαγή που έγινε στην βάση      | timestamp DEFAULT NOW()	   		      |
+| round_no     		| Αριθμός τρέχων γύρων              	    | INT NOT NULL DEFAULT 0			      |
 
 
 
