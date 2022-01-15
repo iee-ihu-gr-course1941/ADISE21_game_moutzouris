@@ -176,7 +176,9 @@
 Οι συναρτήσεις που βρίσκονται στο αρχείο ```render_board.js``` κατά κύριο σκοπό ρυθμίζουν την εμφάνιση των παικτών σε περίπτωση που είναι 2 έως 4 άτομα και τις συναρτήσεις που ρυθμίζουν την ανταλλαγή φύλλων και την αφαίρεση τους. 
 
 * Η συνάρτηση ```function updateOpponentCards(player_turn, player_cards)``` έχει πολλές ιδιότητες :
-* * ddadsa
-* * dasdasdas
+* * ```Η εντολή document.getElementById(`opponent-cards-${player_turn}`)``` παίρνει όλες τις κάρτες 
+* *  Στην ```for (let card of player_cards) ``` βάζει τις κάρτες που μοιράστηκαν σε συγκεκριμένο container για κάθε παίκτη.
+* * Η If ```if (serverState.number_of_players ==**)``` ανάλογα των αριθμό τον παικτών φτιάχνει και ένα διαφορετικό container όπου θα δεσμεύσει  το αντίστοιχο χώρο για την εμφανίσει των καρτών έπειτα.  
+* * H ```εντολή usernameHeader.innerText = clientState.usernames[player_turn];``` δίνει στον πρώτο παίκτη την αρχική σειρά.
 
 
