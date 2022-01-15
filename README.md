@@ -73,12 +73,20 @@
 
 Ο πίνακας game_status αποθηκεύει την κατάσταση του παιχνιδιού:
 
+| Attribute    |  Description  				   | Values	  		 		      |
+|--------------|-------------------------------------------|-----------------------------		      |
+| id           | Primary key   				   | int  AUTO_INCREMENT 			      |	
+| session_id   | id  Το session το οποίο είναι ενεργο      | enum( 'initialized', 'started','ended','aborted')|
+| status       | Η κατάσταση του παιχνιδιού                | varchar	   				      |
+| player_turn  	    	| Σειρά παικτη 				    | int NOT NULL DEFAULT 1			      |	
+| number_of_players 	| Αριθμός παικτών      			    | INT NOT NULL				      |
+| winner		| Νικητής Παίκτης               	    | enum('0', '1', '2', '3','4' ), NOT NULL	      |
+| loser			| Χαμενός Παίκτης               	    | enum('0', '1', '2', '3','4' ), NOT NULL	      |
+| id           		| Primary key   			    | int  AUTO_INCREMENT 			      |	
+| first_round  		| Παίκτης που παίρνει τον πρώτο γυρο        | BOOLEAN NOT NULL DEFAULT TRUE		      |
+| last_change    	| τελευταία αλλαγή που έγινε στην βάση      | timestamp DEFAULT NOW()	   		      |
+| round_no     		| αριθμός τρέχων γύρων              	    | INT NOT NULL DEFAULT 0			      |
 
-| Attribute    |  Description  				   | Values	  		 		     |
-|--------------|-------------------------------------------|-----------------------------		     |
-| id           | Primary key   				   | int  AUTO_INCREMENT 			     |	
-| session_id   | id  Το session το οποίο είναι ενεργο      | enum( 'initialized', 'started','ended','aborted'|
-| status       | Η κατάσταση του παιχνιδιού                | varchar	   				     |
 
 
 Στο αρχείο ```db_upass.php```, βρίσκεται το username της βάσης και ο κωδικός.
