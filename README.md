@@ -179,6 +179,9 @@
 * * ```Η εντολή document.getElementById(`opponent-cards-${player_turn}`)``` παίρνει όλες τις κάρτες 
 * *  Στην ```for (let card of player_cards) ``` βάζει τις κάρτες που μοιράστηκαν σε συγκεκριμένο container για κάθε παίκτη.
 * * Η If ```if (serverState.number_of_players ==**)``` ανάλογα των αριθμό τον παικτών φτιάχνει και ένα διαφορετικό container όπου θα δεσμεύσει  το αντίστοιχο χώρο για την εμφανίσει των καρτών έπειτα.  
-* * H ```εντολή usernameHeader.innerText = clientState.usernames[player_turn];``` δίνει στον πρώτο παίκτη την αρχική σειρά.
+* * H εντολή ```usernameHeader.innerText = clientState.usernames[player_turn];``` δίνει στον πρώτο παίκτη την αρχική σειρά.
 
+* Η συνάρτηση ```function createCardContainer(player_turn, card)``` για αντιπάλους κρύβει τα χαρτιά τους βάζοντας ένα κρυφό χαρτί 
+
+* Η συνάρτηση ```function swapCard(fromPlayer, toPlayer, cardId)``` αλλάζει τα χαρτιά του αριστερού παίκτη με τον τρέχων παίκτη. Η εντολή που το υλοποιεί αυτό είναι ```nextPlayerTurn = serverState.remainingPlayers[nextPlayerIndex];``` ώστε να πάρει τον επόμενο παίκτη που βρίσκεται στα αριστερά και η εντολή  ```response = await fetch(`${url}/api/controller.php/board/swap-card/${fromPlayer}/${toPlayer}/${cardId}`).then((res) => res.json());``` κάνει την αλλαγή των καρτών.
 
