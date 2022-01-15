@@ -55,7 +55,7 @@
 |------------|-----------------------------------|---------	   		    |
 |id          | Primary key   			 | int NOT NULL	    		    |	
 |cardname    | Αριθμος κάρτας    		 | varchar(255) NOT NULL	    |
-|cardchar    | Ομάδα κάρτας      	         | varchar(255) NOT NULL	    |
+|cardchar    | Ομάδα κάρτας      	         | spades, hearts, diamonds, clubs  |
 |url         | Εικόνα κάρτας			 | varchar(2000) NOT NULL    	    |
 
 
