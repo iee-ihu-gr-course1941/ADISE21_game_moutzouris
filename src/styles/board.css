@@ -97,16 +97,16 @@
 	flex: 1 0 0;
 	overflow-x: hidden;
 	cursor: pointer;
+	transition: 0.2s all ease-in-out;
 }
 .card-container > img {
 	border-radius: 0.6rem;
-	transition: 0.2s all ease-in-out;
 	box-sizing: border-box;
-	border: 0.05rem solid transparent;
 }
 
-.card-container > img:hover {
-	border: 0.2rem solid rgba(37, 197, 77, 0.844);
+div[class='card-container']:hover {
+	transform: scale(1.1);
+	transform: translate(0,-5%);
 }
 .card-container:last-child {
 	flex: 0 0 auto;
