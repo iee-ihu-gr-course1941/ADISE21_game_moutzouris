@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Chat</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+             var from = null, start = 0,url = 'http://localhost/chat.php';
+             $(document).ready(function()){
+                 from = prompt("Πληκτρολόγησε όνομα");
+                 $('form').submit(function(e)){
+                     s.post(url, {message: $('#message').val()
+                       message: $('#message'.val)
+                    })
+                     return false;
+                 }0
+             })
+        </script>
+        
+        <style>
+            body{
+                margin: 0;
+                overflow: hidden;
+            }
+            #messages{
+                height: 88vh;
+                overflow-x:hidden;
+                padding: 10px;
+                background-image: url(wallpaper.jpg)
+            }
+            form{
+                display :flex
+            }
+            input{
+                font-size: 1.2rem;
+                padding: 10px;
+                margin: 10px 5px;
+                border: 1px solid;
+                border-radius: 5px
+            }
+            #message{
+                flex: 2
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div id="messages"></div>
+
+        <form>
+            <input type="text" id="message" autocomplete="off" autofocus placeholder="Πληκτρολόγησε μήνυμα">
+            <input type="submit" value="Αποστολή">
+        </form>
+    </body>
+</html>
