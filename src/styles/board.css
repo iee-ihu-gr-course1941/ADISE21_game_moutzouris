@@ -78,7 +78,7 @@
 	width: 90%;
 	height: 16.5rem;
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: center;
 	padding: 1rem 0;
 	column-gap: 0.2rem;
@@ -98,6 +98,7 @@
 	overflow-x: hidden;
 	cursor: pointer;
 	transition: 0.2s all ease-in-out;
+	max-width: fit-content;
 }
 .card-container > img {
 	border-radius: 0.6rem;
@@ -106,7 +107,7 @@
 
 div[class='card-container']:hover {
 	transform: scale(1.1);
-	transform: translate(0,-5%);
+	transform: translate(0, -5%);
 }
 .card-container:last-child {
 	flex: 0 0 auto;
